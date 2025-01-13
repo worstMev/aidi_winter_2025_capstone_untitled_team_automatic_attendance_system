@@ -3,7 +3,7 @@
 
 
 Team members :
-- Tech lead : 100994569 || Herify Rakotoarisoa Ramahandry
-- Team member : 100939943 || Andres Chaparro
-- Team member : 100780233 || Joshua Yap
-- Team member : 101002686 || Abdullah majid
+- Tech lead : 100994569 || Herify Rakotoarisoa Ramahandry || worstMev
+- Team member : 100939943 || Andres Chaparro || andrsfch
+- Team member : 100780233 || Joshua Yap || BirdCraftSSB
+- Team member : 101002686 || Abdullah majid || Abdullahmajid1
