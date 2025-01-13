@@ -1,0 +1,2 @@
+# aidi_winter_2025_capstone_untitled_team_automatic_attendance_system
+Untitled team repository for capstone 2005 aidi winter 2025
