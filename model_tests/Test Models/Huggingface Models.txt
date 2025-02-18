@@ -1,0 +1,2 @@
+https://huggingface.co/rhdang/facial-recognition
+https://huggingface.co/qualcomm/MediaPipe-Face-Detection
