@@ -1,7 +1,9 @@
+import Link from 'next/link';
+import styles from './admin.module.css';
 
 export default function Home() {
    return (
-       <div>
+       <>
            <p>
                admin routes here:
                    make admin routes to seed database : 
@@ -10,6 +12,9 @@ export default function Home() {
                    /admin/create_student : select institution
                    /admin/create_course : select institution , instructor
            </p>
-       </div>
+           <Link href="/">
+                back
+           </Link>
+       </>
    )
 }
