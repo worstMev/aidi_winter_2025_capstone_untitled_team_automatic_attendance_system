@@ -12,6 +12,9 @@ export default function Home() {
                    /admin/create_student : select institution
                    /admin/create_course : select institution , instructor
            </p>
+           <Link href="/admin/create_student">
+                create a student
+           </Link>
            <Link href="/">
                 back
            </Link>

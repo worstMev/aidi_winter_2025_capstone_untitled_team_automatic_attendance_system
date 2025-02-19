@@ -1,0 +1,17 @@
+
+.take_picture{
+    display : flex;
+    flex-direction : row;
+    height : fit-content;
+    border : 1px solid blue;
+}
+
+.take_picture canvas{
+    display : none;
+}
+
+.display{
+    display : flex;
+    flex-direction: column;
+    height : fit-content;
+}
