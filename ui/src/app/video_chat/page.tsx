@@ -23,7 +23,7 @@ export default function Page() {
     const canvas = useRef(null);
     const socket = useRef(null);
 
-    const SERVER = 'http://3.129.247.195:8000';
+    const SERVER = 'http://3.17.81.228:8000';
     const LOCAL = 'http://localhost:8000';
     
     let interval_id = null;
@@ -258,7 +258,7 @@ export default function Page() {
             </div>
             <div className={styles.test}>
                 <div>
-                    <p> Attendance </p>
+                    <p> Attendance : </p>
                     <ul>
                     { attendance_disp }
                     </ul>
