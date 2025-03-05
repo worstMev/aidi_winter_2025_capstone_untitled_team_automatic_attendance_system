@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import styles from './create_student.module.css';
 
-import TakePicture from '@/component/take_picture.tsx';
+import TakePicture from '@/component/take_picture';
 
 export default function Home() {
    return (
