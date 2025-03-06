@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Screen Capture & Processed Display</title>
+</head>
+<body>
+  <button id="startCapture">Start Screen Capture</button>
+  <button id="stopCapture" disabled>Stop Capture</button>
+  <video id="screenVideo" autoplay playsinline style="width:80%; height:auto;"></video>
+  <canvas id="frameCanvas" style="display:none;"></canvas>
+  <h3>Processed Frame (with detection boxes):</h3>
+  <img id="processedImage" alt="Processed frame will appear here" style="width:80%;"/>
+
+  <script>
+    const startButton = document.getElementById('startCapture');
+    const stopButton = document.getElementById('stopCapture');
+    const videoElement = document.getElementById('screenVideo');
+    const canvas = document.getElementById('frameCanvas');
+    const processedImg = document.getElementById('processedImage');
+    const ctx = canvas.getContext('2d');
+    let captureInterval;
+    let stream;
+
+    startButton.addEventListener('click', async () => {
+      try {
+        stream = await navigator.mediaDevices.getDisplayMedia({
+          video: { cursor: "always" },
+          audio: false
+        });
+        videoElement.srcObject = stream;
+        stopButton.disabled = false;
+        startButton.disabled = true;
+
+        // Capture and send a frame every 5000 ms (5 seconds).
+        captureInterval = setInterval(() => {
+          if (videoElement.videoWidth > 0 && videoElement.videoHeight > 0) {
+            canvas.width = videoElement.videoWidth;
+            canvas.height = videoElement.videoHeight;
+            ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+            const imageDataUrl = canvas.toDataURL('image/jpeg');
+
+            // Send the frame to the backend.
+            fetch('http://localhost:5000/upload_frame', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ image: imageDataUrl })
+            })
+            .then(response => response.json())
+            .then(data => {
+              if (data.status === "processed" && data.image) {
+                // Update the image element with the processed frame.
+                processedImg.src = data.image;
+              }
+              console.log('Server response:', data);
+            })
+            .catch(error => console.error('Error sending frame:', error));
+          }
+        }, 5000);
+      } catch (error) {
+        console.error("Error accessing display media:", error);
+      }
+    });
+
+    stopButton.addEventListener('click', () => {
+      clearInterval(captureInterval);
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+      }
+      startButton.disabled = false;
+      stopButton.disabled = true;
+    });
+  </script>
+</body>
+</html>
