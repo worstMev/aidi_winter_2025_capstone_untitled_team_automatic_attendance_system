@@ -220,7 +220,7 @@ export default function Page() {
    let array_vids = [];
    for(let i=0 ; i<n_stream ; i++){
        //array_vids.push(<p key={i}> video {i} </p>);
-       array_vids.push( <StreamVideo key = {i} stream={my_stream}/>);
+       array_vids.push( <StreamVideo key = {i} stream={my_stream} reduce_stream={reduce_stream}/>);
    }
 
    //display attendance
@@ -249,7 +249,7 @@ export default function Page() {
                 </div>
                 <div className={styles.others}>
                     {
-                        //array_vids
+                        array_vids
                     }
                     <p> Peer video ... </p>
                     <video ref={remote_video_ref} autoPlay />

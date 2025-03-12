@@ -7,7 +7,7 @@ import {useRef, useState, useEffect} from 'react';
 
 export default function StreamVideo(props) {
     //const { stream, remote_peer_id } = props;
-    const { stream } = props;
+    const { stream, reduce_stream } = props;
 
     //const [c_stream,set_c_stream] = useState(stream);
     const ref = useRef(null);
@@ -25,6 +25,17 @@ export default function StreamVideo(props) {
     //
     //making call from this component
     //involves my_stream and ref 
+    //
+    //
+
+    const stopStream = async () => {
+        const tracks = ref.current.srcObject.getTracks();
+        tracks.forEach((track) => {
+            track.stop();
+        });
+        ref.current.srcObject = null;
+        reduce_stream();
+    }
 
     
 
@@ -33,7 +44,7 @@ export default function StreamVideo(props) {
         <div>
             <p> StreamVideo </p>
             <video ref = {ref} autoPlay />
-            <button> close </button>
+            <button onClick={stopStream}> close </button>
         </div>
     )
 }
