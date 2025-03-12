@@ -75,6 +75,7 @@ export default function Page() {
                     my_video_ref.current.play();
                     call.answer(mediaStream)
                     call.on('stream', function( remoteStream : MediaStream) {
+                        console.log('stream received from my call', remoteStream);
                         if ( remote_video_ref.current ){
                             remote_video_ref.current.srcObject = remoteStream
                             remote_video_ref.current.play();
@@ -107,7 +108,7 @@ export default function Page() {
                 const call = peer_instance.current.call(remotePeerId, mediaStream)
 
                 call.on('stream', ( remoteStream : MediaStream ) => {
-                    console.log('stream received from my call');
+                    console.log('stream received from my call', remoteStream);
                     if( remote_video_ref.current ){
                         remote_video_ref.current.srcObject = remoteStream
                         remote_video_ref.current.play();
