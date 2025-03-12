@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-
+import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 //mine
 import Top_header from '@/app/top_header';
 //import Head from 'next/head';
@@ -30,7 +30,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <Top_header />
+        <AppRouterCacheProvider>
         {children}
+        </AppRouterCacheProvider>
       </body>
     </html>
   );
