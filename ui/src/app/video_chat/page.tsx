@@ -245,15 +245,15 @@ export default function Page() {
                     <input type="text" value={remote_peer_id} onChange={e => set_remote_peer_id(e.target.value)} />
                     <button onClick={() => call(remote_peer_id)}>Call</button>
                     <video ref={my_video_ref} autoPlay/>
+                    <video ref={remote_video_ref} autoPlay />
                     <canvas ref={ canvas } >
                     </canvas>
                 </div>
                 <div className={styles.others}>
                     {
-                        array_vids
+                        //array_vids
                     }
                     <p> Peer video ... </p>
-                    <video ref={remote_video_ref} autoPlay />
 
                 </div>
             </div>
