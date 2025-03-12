@@ -77,7 +77,7 @@ export default function Page() {
                     call.on('stream', function( remoteStream : MediaStream) {
                         if ( remote_video_ref.current ){
                             remote_video_ref.current.srcObject = remoteStream
-                            //remote_video_ref.current.play();
+                            remote_video_ref.current.play();
                         }
                     });
                 }
@@ -110,7 +110,7 @@ export default function Page() {
                     console.log('stream received from my call');
                     if( remote_video_ref.current ){
                         remote_video_ref.current.srcObject = remoteStream
-                        //remote_video_ref.current.play();
+                        remote_video_ref.current.play();
                     }
                 });
             }
