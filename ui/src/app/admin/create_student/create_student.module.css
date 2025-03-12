@@ -1,0 +1,27 @@
+
+.form {
+    display : flex;
+    width : 100%;
+    height : fit-content;
+    flex-direction : column;
+    align-items : center;
+    border : 1px solid green;
+}
+
+.form label{
+    display : flex;
+    flex-direction : row;
+    align-items : center;
+    justify-content : space-between;
+    width : 75%;
+    min-height : 50px;
+    max-height : fit-content;
+    border : 1px solid red;
+    margin : 5px;
+    padding : 5px;
+}
+
+.form label input{
+    height: inherit;
+    width : 50%;
+}
