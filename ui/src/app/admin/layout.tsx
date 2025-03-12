@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import styles  from "./admin.module.css";
 import SideMenu from './../../component/sideMenu.js';
 import  Link  from 'next/link';

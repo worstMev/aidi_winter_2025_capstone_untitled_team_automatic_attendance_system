@@ -11,7 +11,8 @@ export default function TakePicture() {
     const output = useRef(null);
     
 
-    const start_capture = async () => {
+    const start_capture = async (e) => {
+        e.preventDefault();
         console.log('start capture');
         try {
             const video_stream = await navigator.mediaDevices.getUserMedia({ video : true , audio : false });
@@ -22,8 +23,19 @@ export default function TakePicture() {
            console.log('error in start capture:', err) 
         }
     }
+    //stop video feed
+    const off_stream = async (e) => {
+        e.preventDefault();
+        const tracks = video_ref.current.srcObject.getTracks();
+        tracks.forEach((track) => {
+            track.stop();
+        });
+        video_ref.current.srcObject = null;
+        // TODO :remove image as well
+    }
 
-    const take_picture = async () => {
+    const take_picture = async (e) => {
+        e.preventDefault();
         const width = video_ref.current.videoWidth;
         const height = video_ref.current.videoHeight;
         console.log('take_picture',width, height);
@@ -44,6 +56,7 @@ export default function TakePicture() {
                 </div>
                 <div>
                     <button onClick={start_capture}> start </button>
+                    <button onClick={off_stream}> stop </button>
                     <button onClick={take_picture}> Take picture </button>
                 </div>
                 <canvas ref={ canvas } >

@@ -14,11 +14,14 @@
     flex-direction : column;
     align-items : center;
     width : 87%;
-    height : 100%;
+    height : fit-content;
     border : 1px solid green;
 }
 .content div {
     width: 90%;
+    display : flex;
+    flex-direction : column;
+    height : fit-content;
 }
 
 .header{
