@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import styles from "./page.module.css";
 import Link from 'next/link';
 

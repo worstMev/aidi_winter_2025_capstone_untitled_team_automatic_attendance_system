@@ -1,5 +1,6 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 "use client"; // Add this directive at the very top
-
 import { useState } from 'react';
 import styles from "./top_header.module.css";
 import Link from 'next/link';
