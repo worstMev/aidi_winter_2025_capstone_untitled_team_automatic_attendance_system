@@ -1,19 +1,48 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
-import Link from 'next/link';
-import styles from './admin.module.css';
+"use client"; // Mark as a client component
 
-export default function Home() {
-   return (
-       <>
-           <p>
-               admin routes here:
-                   make admin routes to seed database : 
-                   /admin/create_institution DONE
-                   /admin/create_instructor : select instution
-                   /admin/create_student : select institution
-                   /admin/create_course : select institution , instructor
-           </p>
-       </>
-   )
+import styles from "./admin.module.css";
+import Link from 'next/link';
+
+export default function AdminDashboard() {
+  return (
+    <div className={styles.adminPage}>
+      {/* Main Content */}
+      <main className={styles.mainContent}>
+        <div className={styles.header}>
+          <h1>Admin Dashboard</h1>
+          <p>Manage your courses, institutes, instructors, and students.</p>
+        </div>
+
+        {/* Action Cards */}
+        <div className={styles.grid}>
+          <Link href="/admin/create_course" className={styles.card}>
+            <h2>Create Course</h2>
+            <p>Add a new course to the system.</p>
+          </Link>
+
+          <Link href="/admin/create_institute" className={styles.card}>
+            <h2>Create Institute</h2>
+            <p>Register a new institute.</p>
+          </Link>
+
+          <Link href="/admin/create_instructor" className={styles.card}>
+            <h2>Create Instructor</h2>
+            <p>Add a new instructor profile.</p>
+          </Link>
+
+          <Link href="/admin/create_student" className={styles.card}>
+            <h2>Create Student</h2>
+            <p>Register a new student.</p>
+          </Link>
+        </div>
+
+        {/* Back to Home Button */}
+        <div className={styles.controls}>
+          <Link href="/" className={styles.button}>
+            Back to Home
+          </Link>
+        </div>
+      </main>
+    </div>
+  );
 }
