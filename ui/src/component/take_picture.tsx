@@ -1,70 +1,77 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
-'use client';
-
-import { useRef } from 'react'
+"use client";
+import { useRef } from 'react';
 import styles from './take_picture.module.css';
 
 export default function TakePicture() {
-    const video_ref = useRef(null);
-    const canvas = useRef(null);
-    const output = useRef(null);
-    
+  const video_ref = useRef<HTMLVideoElement | null>(null);
+  const canvas = useRef<HTMLCanvasElement | null>(null);
+  const output = useRef<HTMLImageElement | null>(null);
 
-    const start_capture = async (e) => {
-        e.preventDefault();
-        console.log('start capture');
-        try {
-            const video_stream = await navigator.mediaDevices.getUserMedia({ video : true , audio : false });
-            video_ref.current.srcObject = video_stream;
-            video_ref.current.play();
-            
-        } catch (err) {
-           console.log('error in start capture:', err) 
-        }
+  const start_capture = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    console.log('start capture');
+    try {
+      const video_stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+      if (video_ref.current) {
+        video_ref.current.srcObject = video_stream;
+        video_ref.current.play();
+      }
+    } catch (err) {
+      console.log('error in start capture:', err);
     }
-    //stop video feed
-    const off_stream = async (e) => {
-        e.preventDefault();
-        const tracks = video_ref.current.srcObject.getTracks();
-        tracks.forEach((track) => {
-            track.stop();
-        });
-        video_ref.current.srcObject = null;
-        // TODO :remove image as well
-    }
+  };
 
-    const take_picture = async (e) => {
-        e.preventDefault();
-        const width = video_ref.current.videoWidth;
-        const height = video_ref.current.videoHeight;
-        console.log('take_picture',width, height);
-        canvas.current.setAttribute('width', width);
-        canvas.current.setAttribute('height', height);
-        const context = canvas.current.getContext('2d');
+  const off_stream = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (video_ref.current && video_ref.current.srcObject) {
+      const tracks = (video_ref.current.srcObject as MediaStream).getTracks();
+      tracks.forEach((track) => {
+        track.stop();
+      });
+      video_ref.current.srcObject = null;
+    }
+    if (output.current) {
+      output.current.src = ''; // Clear the image output
+    }
+  };
+
+  const take_picture = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (video_ref.current && canvas.current && output.current) {
+      const width = video_ref.current.videoWidth;
+      const height = video_ref.current.videoHeight;
+      console.log('take_picture', width, height);
+      canvas.current.width = width;
+      canvas.current.height = height;
+      const context = canvas.current.getContext('2d');
+      if (context) {
         context.drawImage(video_ref.current, 0, 0, width, height);
         const data = canvas.current.toDataURL('image/png');
-        output.current.setAttribute( 'src' , data);
+        output.current.src = data;
+      }
     }
+  };
 
-    return(
-        <div className={styles.take_picture}>
-            <p> take picture from webcam here </p>
-            <div className = {styles.display} >
-                <div>
-                    <video ref={video_ref}>video not available</video> 
-                </div>
-                <div>
-                    <button onClick={start_capture}> start </button>
-                    <button onClick={off_stream}> stop </button>
-                    <button onClick={take_picture}> Take picture </button>
-                </div>
-                <canvas ref={ canvas } >
-                </canvas>
-                <div className="output" >
-                    <img alt="picture will appear here" ref ={output}/>
-                </div>
-            </div>
-        </div>
-    )
+  return (
+    <div className={styles.take_picture}>
+      <div className={styles.videoContainer}>
+        <video ref={video_ref} className={styles.video}>Video not available</video>
+      </div>
+      <div className={styles.controls}>
+        <button onClick={start_capture} className={styles.button}>
+          Start
+        </button>
+        <button onClick={off_stream} className={styles.button}>
+          Stop
+        </button>
+        <button onClick={take_picture} className={styles.button}>
+          Take Picture
+        </button>
+      </div>
+      <div className={styles.outputContainer}>
+        <img alt="Picture will appear here" ref={output} className={styles.outputImage} />
+      </div>
+      <canvas ref={canvas} style={{ display: 'none' }}></canvas>
+    </div>
+  );
 }

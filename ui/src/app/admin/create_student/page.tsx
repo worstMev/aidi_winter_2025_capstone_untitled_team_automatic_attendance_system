@@ -1,11 +1,7 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
-'use client';
+"use client";
 import Link from 'next/link';
 import styles from './create_student.module.css';
 import React, { useState, useEffect } from 'react';
-import { TextField, Button } from '@mui/material';
-
 import TakePicture from '@/component/take_picture';
 
 const CreateStudent = () => {
@@ -43,88 +39,138 @@ const CreateStudent = () => {
   };
 
   return (
-    <div className={styles.all}>
-      <h2>Create Student</h2>
-      <form onSubmit={handleSubmit} >
-        <TextField
-          label="Student ID"
-          name="studentId"
-          value={formData.studentId}
-          InputProps={{ readOnly: true }}
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          label="First Name"
-          name="firstName"
-          value={formData.firstName}
-          onChange={handleChange}
-          required
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          label="Middle Name"
-          name="middleName"
-          value={formData.middleName}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          label="Last Name"
-          name="lastName"
-          value={formData.lastName}
-          onChange={handleChange}
-          required
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          label="Email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          label="Photo ID (URL)"
-          name="photoId"
-          value={formData.photoId}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          label="Semester"
-          name="semester"
-          value={formData.semester}
-          onChange={handleChange}
-          required
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          label="Timestamp"
-          name="timestamp"
-          value={formData.timestamp}
-          InputProps={{ readOnly: true }}
-          fullWidth
-          margin="normal"
-        />
-        <div className={styles.label}>
-            Take picture :
-                <TakePicture/>
+    <div className={styles.container}>
+      <h1 className={styles.title}>Create Student</h1>
+      <form onSubmit={handleSubmit} className={styles.form}>
+        <div className={styles.formGroup}>
+          <label htmlFor="studentId" className={styles.label}>
+            Student ID
+          </label>
+          <input
+            type="text"
+            id="studentId"
+            name="studentId"
+            value={formData.studentId}
+            className={styles.input}
+            readOnly
+          />
         </div>
-        <Button type="submit" variant="contained" color="primary" style={{ marginTop: '20px' }}>
+
+        <div className={styles.formGroup}>
+          <label htmlFor="firstName" className={styles.label}>
+            First Name
+          </label>
+          <input
+            type="text"
+            id="firstName"
+            name="firstName"
+            value={formData.firstName}
+            onChange={handleChange}
+            className={styles.input}
+            required
+          />
+        </div>
+
+        <div className={styles.formGroup}>
+          <label htmlFor="middleName" className={styles.label}>
+            Middle Name
+          </label>
+          <input
+            type="text"
+            id="middleName"
+            name="middleName"
+            value={formData.middleName}
+            onChange={handleChange}
+            className={styles.input}
+          />
+        </div>
+
+        <div className={styles.formGroup}>
+          <label htmlFor="lastName" className={styles.label}>
+            Last Name
+          </label>
+          <input
+            type="text"
+            id="lastName"
+            name="lastName"
+            value={formData.lastName}
+            onChange={handleChange}
+            className={styles.input}
+            required
+          />
+        </div>
+
+        <div className={styles.formGroup}>
+          <label htmlFor="email" className={styles.label}>
+            Email
+          </label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            className={styles.input}
+            required
+          />
+        </div>
+
+        <div className={styles.formGroup}>
+          <label htmlFor="photoId" className={styles.label}>
+            Photo ID (URL)
+          </label>
+          <input
+            type="text"
+            id="photoId"
+            name="photoId"
+            value={formData.photoId}
+            onChange={handleChange}
+            className={styles.input}
+          />
+        </div>
+
+        <div className={styles.formGroup}>
+          <label htmlFor="semester" className={styles.label}>
+            Semester
+          </label>
+          <input
+            type="text"
+            id="semester"
+            name="semester"
+            value={formData.semester}
+            onChange={handleChange}
+            className={styles.input}
+            required
+          />
+        </div>
+
+        <div className={styles.formGroup}>
+          <label htmlFor="timestamp" className={styles.label}>
+            Timestamp
+          </label>
+          <input
+            type="text"
+            id="timestamp"
+            name="timestamp"
+            value={formData.timestamp}
+            className={styles.input}
+            readOnly
+          />
+        </div>
+
+        <div className={styles.formGroup}>
+         <label htmlFor="takePicture" className={styles.label}>
+           Take Picture
+         </label>
+         <TakePicture />
+        </div>
+
+        <button type="submit" className={styles.submitButton}>
           Submit
-        </Button>
+        </button>
       </form>
     </div>
   );
 };
 
 export default CreateStudent;
-
