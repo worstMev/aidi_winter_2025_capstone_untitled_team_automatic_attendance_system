@@ -1,18 +1,63 @@
-
-.take_picture{
-    display : flex;
-    flex-direction : row;
-    height : fit-content;
-    border : 1px solid lightgrey;
-    width : 100%;
-}
-
-.take_picture canvas{
-    display : none;
-}
-
-.display{
-    display : flex;
+.take_picture {
+    display: flex;
     flex-direction: column;
-    height : fit-content;
-}
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+  
+  .videoContainer {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+  }
+  
+  .video {
+    width: 100%;
+    height: auto;
+    background-color: var(--background);
+  }
+  
+  .controls {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  
+  .button {
+    padding: 0.5rem 1rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .button:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-2px);
+  }
+  
+  .button:active {
+    transform: translateY(0);
+  }
+  
+  .outputContainer {
+    margin-top: 1.5rem;
+    width: 100%;
+    max-width: 400px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+  }
+  
+  .outputImage {
+    width: 100%;
+    height: auto;
+    background-color: var(--background);
+  }
