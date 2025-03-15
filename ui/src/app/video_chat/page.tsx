@@ -32,7 +32,7 @@ export default function Page() {
 
     useEffect( () => {
         //initialize the socket
-        const socket_client = io( SERVER,
+        const socket_client = io( LOCAL,
                     { path : '/ws/socket.io/' });
 
         socket_client.on( 'connect' , () => {
@@ -245,7 +245,6 @@ export default function Page() {
                     <input type="text" value={remote_peer_id} onChange={e => set_remote_peer_id(e.target.value)} />
                     <button onClick={() => call(remote_peer_id)}>Call</button>
                     <video ref={my_video_ref} autoPlay/>
-                    <video ref={remote_video_ref} autoPlay />
                     <canvas ref={ canvas } >
                     </canvas>
                 </div>
@@ -254,6 +253,7 @@ export default function Page() {
                         //array_vids
                     }
                     <p> Peer video ... </p>
+                    <video ref={remote_video_ref} autoPlay />
 
                 </div>
             </div>
