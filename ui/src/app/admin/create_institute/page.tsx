@@ -4,6 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from './create_institute.module.css';
 
+const LOCAL = 'http://localhost:8000/create_institution';
 const CreateInstitute = () => {
   const [formData, setFormData] = useState({
     instituteId: '',
@@ -31,11 +32,27 @@ const CreateInstitute = () => {
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const handleSubmit = (e: { preventDefault: () => void }) => {
+  const handleSubmit = async  (e: { preventDefault: () => void }) => {
     e.preventDefault();
     const timestamp = new Date().toLocaleString();
     setFormData((prevData) => ({ ...prevData, timestamp }));
     console.log('Form Data:', formData);
+    let jsonData = JSON.stringify(formData);
+    console.log('Form Data:', jsonData);
+    try {
+        const res = await fetch(LOCAL, {
+            method: 'POST',
+            body: jsonData,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        const data = await res.json();
+        console.log('Response from server:', data);
+    } catch (error) {
+        console.error('Error sending data:', error);
+    }
     alert('Institute created successfully!');
   };
 
