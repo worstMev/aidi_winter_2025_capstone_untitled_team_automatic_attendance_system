@@ -58,7 +58,7 @@ export default function RootLayout({
               backgroundColor: 'var(--background)', 
               borderTop: '1px solid var(--border-color)'
             }}>
-              <p>© 2024 Video Atten. All rights reserved. made with ❤️ by Majid, Herify, Andy & Joshua</p>
+              <p>© 2025 Video Atten. All rights reserved. made with ❤️ by Majid, Herify, Andy & Joshua</p>
             </footer>
           </div>
         </AppRouterCacheProvider>
