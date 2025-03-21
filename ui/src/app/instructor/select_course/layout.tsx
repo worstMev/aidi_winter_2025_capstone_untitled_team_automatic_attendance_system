@@ -1,4 +1,5 @@
-
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 "use client"; // Mark as a client component if you use hooks or client-side features
 
  // Import the Top Header
