@@ -6,7 +6,7 @@ import Link from 'next/link';
 import styles from "./layout.module.css";
 import { useEffect, useState, } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { fetchClasses } from '@/fetchData.ts';
+import { fetchClasses } from '@/fetchData';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
     const LOCAL = 'http://localhost:8000';

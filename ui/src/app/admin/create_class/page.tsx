@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import styles from './create_class.module.css'; // Import CSS module
 import { useSearchParams, useRouter } from 'next/navigation';
 
-import { fetchInstructors, fetchCourses, createClass } from '@/fetchData.ts';
+import { fetchInstructors, fetchCourses, createClass } from '@/fetchData';
 
 export default function CreateClass() {
 
