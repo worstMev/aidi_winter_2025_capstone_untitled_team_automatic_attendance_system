@@ -15,7 +15,6 @@ const CreateInstitute = () => {
     city: '',
     postalCode: '',
     websiteURL: '',
-    timestamp: '',
   });
 
   useEffect(() => {
@@ -34,8 +33,8 @@ const CreateInstitute = () => {
 
   const handleSubmit = async  (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    const timestamp = new Date().toLocaleString();
-    setFormData((prevData) => ({ ...prevData, timestamp }));
+    //const timestamp = new Date().toLocaleString();
+    //setFormData((prevData) => ({ ...prevData, timestamp }));
     console.log('Form Data:', formData);
     let jsonData = JSON.stringify(formData);
     console.log('Form Data:', jsonData);
@@ -184,19 +183,6 @@ const CreateInstitute = () => {
           />
         </div>
 
-        <div className={styles.formGroup}>
-          <label htmlFor="timestamp" className={styles.label}>
-            Timestamp
-          </label>
-          <input
-            type="text"
-            id="timestamp"
-            name="timestamp"
-            value={formData.timestamp}
-            className={styles.input}
-            readOnly
-          />
-        </div>
 
         <button type="submit" className={styles.submitButton}>
           Submit
