@@ -5,7 +5,7 @@
  // Import the Top Header
 import Link from 'next/link';
 import styles from "./layout.module.css";
-import { useEffect, useState, } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { fetchClasses } from '@/fetchData';
 
@@ -87,7 +87,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     return (
         <div className={styles.page}>
             <div className={styles.selectPane} >
-                <h1>{instructorName}</h1>
+                <Suspense>
+                    <h1>{instructorName}</h1>
+                </Suspense>
                 <div className={styles.courses}>
                     <p> Select a course : </p>
                     <select

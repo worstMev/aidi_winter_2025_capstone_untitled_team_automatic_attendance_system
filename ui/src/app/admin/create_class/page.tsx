@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 "use client";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, } from 'react';
 import styles from './create_class.module.css'; // Import CSS module
 import { useSearchParams, useRouter } from 'next/navigation';
 

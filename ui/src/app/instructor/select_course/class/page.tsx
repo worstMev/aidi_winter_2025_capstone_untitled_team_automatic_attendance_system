@@ -3,7 +3,7 @@
 'use client';
 import styles from "./page.module.css";
 import Link from 'next/link';
-import { useEffect, useState, } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 
 export default function Class_home() {
@@ -12,7 +12,9 @@ export default function Class_home() {
     const classId = params.get('classId'); 
     return(
         <div>
-            <p> Attendance for class {classId} </p>
+            <Suspense>
+                <p> Attendance for class {classId} </p>
+            </Suspense>
             <button onClick={()=> router.back()}> back </button>
         </div>
     );
