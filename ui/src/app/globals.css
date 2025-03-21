@@ -1,59 +1,164 @@
-*{
-	margin:0;
+
+/* Global Styles - Reset and Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
+
 html {
-	height: 100%
-}
-body{
-    margin : 0;
-    width : 100%;
-    height : 100%;
-    /*border : 1px solid green;*/
-    display : flex;
-    flex-direction : column;
-}
-
-/*:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
+  height: 100%;
+  font-size: 16px;
+  scroll-behavior: smooth;
 }
 
 body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-family);
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-*/
-/*
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
 a {
-  color: inherit;
   text-decoration: none;
+  color: inherit;
 }
 
+/* Define Color Palette */
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --primary-color: #0070f3;
+  --secondary-color: #ff4081;
+  --highlight-color: #1db954;
+  --muted: #6b7280;
+  --border-color: #e5e7eb;
+  --font-family: 'Roboto', sans-serif;
+}
+
+
+/* Container for Centering Content */
+.container {
+  padding: 2rem;
+  margin: 0 auto;
+  max-width: 1200px;
+  width: 100%;
+}
+
+/* Typography and Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-family);
+  font-weight: 700;
+  margin: 1.5rem 0 1rem;
+  line-height: 1.3;
+  letter-spacing: -0.025em;
+}
+
+h1 {
+  font-size: 2.5rem;
+  color: var(--primary-color);
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+h3 {
+  font-size: 1.75rem;
+}
+
+h4 {
+  font-size: 1.5rem;
+}
+
+p {
+  font-size: 1rem;
+  line-height: 1.75;
+  color: var(--foreground);
+  margin-bottom: 1.5rem;
+}
+
+/* Buttons */
+.button {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: white;
+  background-color: var(--primary-color);
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.button:hover {
+  background-color: var(--secondary-color);
+  transform: translateY(-2px);
+}
+
+.button:active {
+  transform: translateY(0);
+}
+
+/* Links */
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--secondary-color);
+}
+
+/* Shadows */
+.shadow-sm {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.shadow-md {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.shadow-lg {
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Borders */
+.border {
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+}
+
+/* Spacing System */
+.gap-xs { gap: 0.5rem; }
+.gap-sm { gap: 1rem; }
+.gap-md { gap: 1.5rem; }
+.gap-lg { gap: 2rem; }
+
+:root {
+  --background: #ffffff; /* Light mode background */
+  --foreground: #000000; /* Light mode text color */
+  --primary-color: #0070f3; /* Primary color for buttons and accents */
+  --secondary-color: #ff4081; /* Secondary color for hover states */
+  --border-color: #e0e0e0; /* Border color for inputs */
+  --shadow-md: 10px 10px 10px 10px rgba(0, 0, 0, 0.1); /* Shadow for cards and forms */
+}
+
+/* Dark mode */
 @media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
+  :root {
+    --background: #27262c; /* Dark mode background */
+    --foreground: #fff6f6; /* Dark mode text color */
+    --border-color: #333333; /* Dark mode border color */
   }
-}*/
+}
 
