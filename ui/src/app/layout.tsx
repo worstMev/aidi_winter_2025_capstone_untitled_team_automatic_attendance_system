@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 import Top_header from '@/app/top_header';
 import Head from 'next/head';
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,7 +19,9 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Video chat",
+
   description: "One-to-one video chat application.",
+
 };
 
 export default function RootLayout({
@@ -27,6 +31,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+
       <head>
         <Head>
           <meta name="description" content="One-to-one video chat application." />
@@ -62,6 +67,7 @@ export default function RootLayout({
             </footer>
           </div>
         </AppRouterCacheProvider>
+
       </body>
     </html>
   );

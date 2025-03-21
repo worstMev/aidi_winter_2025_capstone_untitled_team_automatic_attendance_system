@@ -1,3 +1,4 @@
+
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import styles from "./page.module.css";
@@ -33,5 +34,6 @@ export default function Home() {
               </div>
           </div> 
       </div>
+
   );
 }
