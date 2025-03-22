@@ -4,16 +4,21 @@
 
 import { useState } from 'react';
 import styles from './create_course.module.css'; // Import CSS module
+import { createCourse } from '@/fetchData';
 
 export default function CreateCourse() {
   const [courseName, setCourseName] = useState('');
   const [courseDescription, setCourseDescription] = useState('');
   const [courseDuration, setCourseDuration] = useState('');
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  //TODO make create course , need institution_id, instructor_id
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // Logic for submitting the course data
     console.log({ courseName, courseDescription, courseDuration });
+    await createCourse();
+
+
   };
 
   return (

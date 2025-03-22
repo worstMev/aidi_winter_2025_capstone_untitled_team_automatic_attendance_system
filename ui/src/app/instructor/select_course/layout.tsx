@@ -7,7 +7,7 @@ import Link from 'next/link';
 import styles from "./layout.module.css";
 import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { fetchClasses } from '@/fetchData';
+import { fetchClasses, fetchCourses } from '@/fetchData';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
     const LOCAL = 'http://localhost:8000';
@@ -23,43 +23,34 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     const [classes , setClasses] = useState([]);
 
     useEffect(() => {
-      const fecthDataCourses = async () => {
-          if (!instructorId) router.push('/instructor');
-          console.log('instructorId ',instructorId);
-          console.log('params ',params);
-          let url_course = `${LOCAL}/courses/${instructorId}`;
-          try {
-              const res = await fetch(url_course, {
-                  method: 'GET',
-                  headers: {
-                      'Content-Type': 'application/json',
-                  },
-              });
-              const data = await res.json();
-              console.log('Response from server:', data);
-              setCourses(data.courses);
-              setSelectedCourse(data.courses[0][0]);
-              setInstructorName(data.courses[0][2]);
-              return data;
-          } catch (error) {
-              console.error('Error fecthDataCourses:', error);
-          }
-      }
-      const fecthDataClasses = async () => {
-          console.log('get classes for courses', selectedCourse)
-          try {
-              const classes = await fetchClasses(selectedCourse);
-              setClasses(classes);
-          } catch (error) {
-              console.error('Error fecthDataClasses:', error);
-          }
-      }
+        const fecthDataCourses = async () => {
+            if (!instructorId) router.push('/instructor');
+            console.log('instructorId ',instructorId);
+            console.log('params ',params);
+            try{
+                const data = await fetchCourses(instructorId);
+                setCourses(data.courses);
+                setSelectedCourse(data.courses[0][0]);
+                setInstructorName(data.courses[0][2]);
+            }catch(error){
+                console.log('error in fecthDataCourses :', error);
+            }
+        }
+        const fecthDataClasses = async () => {
+            console.log('get classes for courses', selectedCourse)
+            try {
+                const classes = await fetchClasses(selectedCourse);
+                setClasses(classes);
+            } catch (error) {
+                console.error('Error fecthDataClasses:', error);
+            }
+        }
 
-      if (selectedCourse) {
-          fecthDataClasses()
-      }else{
-          fecthDataCourses()
-      }
+        if (selectedCourse) {
+            fecthDataClasses()
+        }else{
+            fecthDataCourses()
+        }
 
     }, [selectedCourse])
 
@@ -80,7 +71,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
     let classes_display = classes.map( (classe) => 
                                       <button key={classe[2]} onClick={()=> openClass(classe[2])}>
-                                      {classe[0] + ' at ' + classe[1]}
+                                      {`${classe[0]} - ${classe[3]} at  ${classe[1]}`}
                                       </button>
     );
 

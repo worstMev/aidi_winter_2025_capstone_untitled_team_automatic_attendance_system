@@ -6,8 +6,9 @@ import Link from 'next/link';
 import { useEffect, useState, } from 'react';
 import { useRouter } from 'next/navigation';
 
+import { fetchInstructors } from '@/fetchData';
+
 export default function Instructor_home() {
-    const LOCAL = 'http://localhost:8000';
 
     const [instructors, setInstructors] = useState([]);
     const [ selectedInstructor, setSelectedInstructor ] = useState(0);  
@@ -16,22 +17,9 @@ export default function Instructor_home() {
 
     useEffect(() => {
       const fecthData = async () => {
-          let url_instructor = LOCAL+'/instructor';
-          try {
-              const res = await fetch(url_instructor, {
-                  method: 'GET',
-                  headers: {
-                      'Content-Type': 'application/json',
-                  },
-              });
-              const data = await res.json();
-              console.log('Response from server:', data);
-              setInstructors(data.instructors);
-              setSelectedInstructor(data.instructors[0][0]);
-              return data;
-          } catch (error) {
-              console.error('Error sending data:', error);
-          }
+          let data = await fetchInstructors();
+          setInstructors(data.instructors);
+          setSelectedInstructor(data.instructors[0][0]);
       }
 
       fecthData();

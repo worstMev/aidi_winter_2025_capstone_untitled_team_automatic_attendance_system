@@ -4,10 +4,12 @@
 import Link from 'next/link';
 import styles from './create_student.module.css';
 import React, { useState, useEffect } from 'react';
-import TakePicture from '@/component/take_picture';
 
-const LOCAL = 'http://localhost:8000/create_student';
-const LOCAL_PIC = 'http://localhost:8000/save_picture';
+import { createStudent, createEmbedding } from '@/fetchData';
+
+import TakePicture from '@/component/take_picture';
+//TODO : institution select
+
 const CreateStudent = () => {
   const [formData, setFormData] = useState({
     studentId: '',
@@ -42,24 +44,10 @@ const CreateStudent = () => {
     console.log('Form Data:', formData);
     let jsonData = JSON.stringify(formData);
     console.log('Form Data:', jsonData);
-    try {
-        const res = await fetch(LOCAL, {
-            method: 'POST',
-            body: jsonData,
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-
-        const data = await res.json();
-        console.log('Response from server:', data);
-        console.log('student ', data.student)
-        if (data.inserted){
-            setCanTakePicture(data.inserted);
-            setFormData(data.student);
-        }
-    } catch (error) {
-        console.error('Error sending data:', error);
+    const data = await createStudent(jsonData);
+    if (data.inserted){
+        setCanTakePicture(data.inserted);
+        setFormData(data.student);
     }
     alert('Student created successfully!');
   };
@@ -75,25 +63,10 @@ const CreateStudent = () => {
           pic.append('picture',pic_data);
           //pic.append('picture','pic_data text');
 
-          let url = `${LOCAL_PIC}/${formData.student_id}`;
-          //let url = LOCAL_PIC;
-          try {
-              const res = await fetch(url, {
-                  method: 'POST',
-                  body: pic,
-                  //headers: {
-                  //    'Content-Type': 'multipart/form-data',
-                  //},
-              });
-              const data = await res.json()
-              console.log('Response from server:', data);
-              if (data.inserted) {
-                  setStudentCreated(true);
-              }
-          }catch(error){
-              console.log('error in savePic :',error);
+          const data = await createEmbedding(formData.student_id, pic);
+          if( data.inserted ){
+              setStudentCreated(true);
           }
-
       }
   }
 
@@ -176,19 +149,6 @@ const CreateStudent = () => {
           />
         </div>
 
-        <div className={styles.formGroup}>
-          <label htmlFor="photoId" className={styles.label}>
-            Photo ID (URL)
-          </label>
-          <input
-            type="text"
-            id="photoId"
-            name="photoId"
-            value={formData.photoId}
-            onChange={handleChange}
-            className={styles.input}
-          />
-        </div>
 
         <div className={styles.formGroup}>
           <label htmlFor="semester" className={styles.label}>

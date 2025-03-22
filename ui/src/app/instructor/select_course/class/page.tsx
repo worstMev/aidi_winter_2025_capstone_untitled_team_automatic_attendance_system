@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 
+//TODO : attendance manual override
 export default function Class_home() {
     const params = useSearchParams();
     const router = useRouter();
