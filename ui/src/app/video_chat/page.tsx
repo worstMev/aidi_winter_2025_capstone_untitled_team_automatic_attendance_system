@@ -8,6 +8,8 @@ import { io } from 'socket.io-client';
 import styles from './video_chat.module.css';
 import StreamVideo from './../../component/streamVideo.tsx';
 
+import { BASE } from '@/fetchData';
+
 export default function Page() {
     const [my_peer_id, set_my_peer_id] = useState(''); 
     const [remote_peer_id, set_remote_peer_id] = useState('');
@@ -23,8 +25,8 @@ export default function Page() {
     const canvas = useRef(null);
     const socket = useRef(null);
 
-    const SERVER = 'http://3.17.81.228:8000';
-    const LOCAL = 'http://localhost:8000';
+    //const SERVER = 'http://3.17.81.228:8000';
+    //const LOCAL = 'http://localhost:8000';
     
     let interval_id = null;
 
@@ -32,7 +34,7 @@ export default function Page() {
 
     useEffect( () => {
         //initialize the socket
-        const socket_client = io( LOCAL,
+        const socket_client = io( BASE,
                     { path : '/ws/socket.io/' });
 
         socket_client.on( 'connect' , () => {

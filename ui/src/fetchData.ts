@@ -1,7 +1,10 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 const LOCAL = 'http://localhost:8000';
-const BASE = LOCAL;
+const SERVER = 'http://18.191.140.215:8000';
+const SERVER_GPU = 'http://3.143.251.171:8000';
+export const BASE = SERVER;
+
 
 const apiCall = async (url,method,jsonData) => {
     console.log('postCall to :',url,method,jsonData);
