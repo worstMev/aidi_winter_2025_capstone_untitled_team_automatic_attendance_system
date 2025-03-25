@@ -14,8 +14,8 @@ export default function Page() {
     const [my_peer_id, set_my_peer_id] = useState(''); 
     const [remote_peer_id, set_remote_peer_id] = useState('');
     const [n_stream, set_n_stream] = useState(0);
-    const [my_streamVids, set_my_streamVids] = useState([]);
     const [my_stream, set_my_stream] = useState(null);
+    const [ interval_id, set_interval_id ] = useState(null);
 
     const [attendance,set_attendance] = useState([]);
 
@@ -25,10 +25,7 @@ export default function Page() {
     const canvas = useRef(null);
     const socket = useRef(null);
 
-    //const SERVER = 'http://3.17.81.228:8000';
-    //const LOCAL = 'http://localhost:8000';
     
-    let interval_id = null;
 
 
 
@@ -98,6 +95,22 @@ export default function Page() {
             socket.current.close();
         }
     },[my_video_ref]);
+
+    //when stream on start sending stream
+    useEffect(() => {
+        console.log('my_stream useEffect');
+        const start_send_stream = async (interv) => {
+            console.log('start_send_stream');
+            await send_picture(interv);
+        }
+
+        start_send_stream(14000);
+
+        return () => {
+            console.log('my_stream useEffect cleanup');
+        }
+        
+    },[]);
     
     //calling a peer
     const call = async (remotePeerId : string ) => {
@@ -202,17 +215,26 @@ export default function Page() {
    }
 
    //send picture of stream
-   const send_picture = async () => {
+   const send_picture = async (interv=10000) => {
        const blob_pic = await take_picture();
        console.log('data we send ', blob_pic);
        if(blob_pic) {
            socket.current.emit('stream', { blob : blob_pic });
-           interval_id = setInterval( async () => {
-               const blob_pic = await take_picture();
-               console.log('data we send ', blob_pic);
-               if (blob_pic) socket.current.emit('stream', { blob : blob_pic });
-           }, 10000);
+       } else {
+           //define an interv ?
        }
+       let new_interval_id = setInterval( async () => {
+           const blob_pic = await take_picture();
+           console.log('data we send ', blob_pic);
+           if (blob_pic) socket.current.emit('stream', { blob : blob_pic });
+       }, interv);
+       console.log('interval_id :', new_interval_id);
+       set_interval_id(new_interval_id);
+   }
+
+   const stop_sending_stream = () => {
+       console.log('stop_sending_stream interval_id:',interval_id);
+       clearInterval(interval_id);
    }
 
    //test emit
@@ -271,7 +293,7 @@ export default function Page() {
                 <button onClick={reduce_stream}> - </button>
                 <button onClick={off_stream}> stream off </button>
                 <button onClick={send_picture}> send my stream </button>
-                <button onClick={()=> clearInterval(interval_id)}> stop sending my stream </button>
+                <button onClick={stop_sending_stream}> stop sending my stream </button>
                 <button onClick={send_message}>send xxx</button>
             </div>
         </div>

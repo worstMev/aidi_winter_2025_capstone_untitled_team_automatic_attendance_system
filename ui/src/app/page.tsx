@@ -28,8 +28,11 @@ export default function Home() {
                       </Link>
                       <Link href="/admin/create_student"> Sign up as a new student </Link>
                   </div>
-                  <Link href="/video_chat" className={styles.link}>
+                  <Link href="/test_attendance?class_id=class_id_1" className={styles.link}>
                   Test
+                  </Link>
+                  <Link href="/video_chat" className={styles.link}>
+                  all_Test
                   </Link>
               </div>
           </div> 
