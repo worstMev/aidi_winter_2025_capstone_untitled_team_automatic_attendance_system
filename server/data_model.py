@@ -38,3 +38,8 @@ class Classe(BaseModel) :
     class_date : str | None = None
     class_start : str | None = None
     class_end : str | None = None
+
+class Course(BaseModel) :
+    course_id : str | None = None
+    instructor_id : str | None = None
+    course_name : str | None = None

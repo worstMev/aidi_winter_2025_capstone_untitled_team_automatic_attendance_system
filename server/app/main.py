@@ -2,11 +2,11 @@ from fastapi import FastAPI,File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 import socketio
 import numpy as np
-#from deepface import DeepFace
+from deepface import DeepFace
 
 #import data model
-from data_model import Institution, Instructor, Student, Classe
-from database import insert_class, insert_institution, insert_instructor, insert_student, insert_embedding, list_courses, list_instructors, list_classes
+from data_model import Institution, Instructor, Student, Course, Classe
+from database import insert_class, insert_institution, insert_instructor, insert_student, insert_embedding, list_courses, list_instructors, list_classes, face_recon, deepface_recon, insert_in_attendance, insert_course
 
 
 
@@ -105,6 +105,13 @@ async def  create_class(classe : Classe) :
     results = insert_class(**classe_dict)
     return results
 
+@app.post('/create_course')
+async def create_course(course : Course) :
+    course_dict = course.dict()
+    results = insert_course(**course_dict)
+    return results
+
+
 # handle socket-io events
 @sio.event
 async def connect(sid, *args, **kwargs):
@@ -183,5 +190,31 @@ async def handle_stream(sid, *args, **kwargs):
 
 
 
+@sio.on('stream_class')
+async def handle_stream_class(sid, *args, **kwargs):
+    print('class_id',args[0]['class_id'])
+
+    class_id = args[0]['class_id']
+    blob = args[0]['blob']
+    name_file = f'buffer/buffer_{sid}.png'
+    #save file
+    with open(name_file,'wb') as file :
+        file.write(blob)
+
+    await sio.emit('received_pic', to =sid)
+    recognized = face_recon(name_file,class_id)
+    #emit socket with recognized tag , remove unkown > student_ids
+    student_names = [
+            face.get('student_name')
+            for face in recognized
+    ]
+    await sio.emit('recognized', {'recognized' : recognized} , to = sid)
+    student_ids = [
+        face.get('student_id')
+        for face in recognized if face.get('student_id') != 'unknown'
+    ]
+
+    await insert_in_attendance(student_ids, class_id)
+    #emit socket recon
 
 
