@@ -239,6 +239,7 @@ def face_recon(img_path, class_id) :
                     JOIN student_course using(course_id)
                     JOIN student using(student_id)
                     JOIN embedding using (student_id)
+            WHERE class_id = '{class_id}'
           )
           SELECT student_name, student_id, similarity
           FROM results
