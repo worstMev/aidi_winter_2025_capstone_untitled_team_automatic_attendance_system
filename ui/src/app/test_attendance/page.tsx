@@ -60,6 +60,11 @@ export default function Page(props) {
             set_attendance(data.attendance);
         });
 
+        socket_client.on('received_pic', () => {
+            let tm = new Date().toLocaleTimeString();
+            setNotifs((old) => [...old , `> ${tm} - image sent to server.`]);
+        });
+
         socket_client.on('recognized', (data) => {
             console.log('recognized :', data.recognized);
             let n_notifs = []
@@ -77,11 +82,18 @@ export default function Page(props) {
         //ini stream and send stream
         
         const initialize_stream = async () => {
+            console.log('initialize stream');
             await get_stream();
         }
         
 
         initialize_stream();
+
+        //get data
+        const fecthDataClass = async () => {
+            //TODO
+            console.log('get classes for  class_id', class_id)
+        }
 
         return () => {
             clearInterval(interval_id);
@@ -98,7 +110,10 @@ export default function Page(props) {
             await send_picture(interv);
         }
 
-        start_send_stream(14000);
+        if(!interval_id) {
+            console.log('interval_id to be created again :', interval_id);
+            start_send_stream(14000);
+        }
 
         return () => {
             console.log('my_stream useEffect cleanup');
@@ -134,12 +149,13 @@ export default function Page(props) {
             console.log('data we send ', blob_pic);
             if (blob_pic) {
                 socket.current.emit('stream_class', {class_id : class_id, blob : blob_pic });
-                let tm = new Date().toLocaleTimeString();
-                setNotifs((old) => [...old , `> ${tm} - image sent to server`]);
             }
         }, interv);
         console.log('interval_id :', new_interval_id);
-        set_interval_id(new_interval_id);
+        set_interval_id((old) => {
+            clearInterval(old);
+            return new_interval_id;
+        });
     }
 
     const get_stream = async () => {
@@ -163,6 +179,7 @@ export default function Page(props) {
             track.stop();
         });
         my_video_ref.current.srcObject = null;
+        set_my_stream(null);
         clearInterval(interval_id);
     }
 

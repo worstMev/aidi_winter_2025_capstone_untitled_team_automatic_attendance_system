@@ -60,6 +60,8 @@ export const createCourse = async (jsonData) => {
     //TODO
     let url_create_course = `${BASE}/create_course`;
     console.log('createCourse', jsonData);
+    const response = await apiCall(url_create_course, 'POST', jsonData);
+    return response;
 }
 
 

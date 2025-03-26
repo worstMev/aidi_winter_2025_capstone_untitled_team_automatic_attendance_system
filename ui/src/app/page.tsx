@@ -28,7 +28,7 @@ export default function Home() {
                       </Link>
                       <Link href="/admin/create_student"> Sign up as a new student </Link>
                   </div>
-                  <Link href="/test_attendance?class_id=class_id_1" className={styles.link}>
+                  <Link href="/test_attendance?class_id=01b778d8-da2a-4310-992e-cd26f446b5f1" className={styles.link}>
                   Test
                   </Link>
                   <Link href="/video_chat" className={styles.link}>

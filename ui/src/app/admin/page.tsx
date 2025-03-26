@@ -15,11 +15,6 @@ export default function AdminDashboard() {
 
         {/* Action Cards */}
         <div className={styles.grid}>
-          <Link href="/admin/create_course" className={styles.card}>
-            <h2>Create Course</h2>
-            <p>Add a new course to the system.</p>
-          </Link>
-
           <Link href="/admin/create_institute" className={styles.card}>
             <h2>Create Institute</h2>
             <p>Register a new institute.</p>
@@ -28,6 +23,16 @@ export default function AdminDashboard() {
           <Link href="/admin/create_instructor" className={styles.card}>
             <h2>Create Instructor</h2>
             <p>Add a new instructor profile.</p>
+          </Link>
+
+          <Link href="/admin/create_course" className={styles.card}>
+            <h2>Create Course</h2>
+            <p>Add a new course to the system.</p>
+          </Link>
+          
+          <Link href="/admin/create_class" className={styles.card}>
+            <h2>Create a new class for a course</h2>
+            <p>Add a new class to a course to the system.</p>
           </Link>
 
           <Link href="/admin/create_student" className={styles.card}>
