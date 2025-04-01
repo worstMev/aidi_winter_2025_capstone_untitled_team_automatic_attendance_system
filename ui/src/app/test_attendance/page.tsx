@@ -31,6 +31,7 @@ export default function Page(props) {
     const [attendance,set_attendance] = useState([]);
 
     const my_video_ref = useRef <HTMLVideoElement | null>(null);
+    const notif_ref = useRef(null);
 
     const canvas = useRef(null);
     const socket = useRef(null);
@@ -64,7 +65,10 @@ export default function Page(props) {
 
         socket_client.on('received_pic', () => {
             let tm = new Date().toLocaleTimeString();
-            setNotifs((old) => [...old , `> ${tm} - image sent to server.`]);
+            setNotifs((old) =>{
+                notif_ref.current.scrollTop = notif_ref.current.scrollHeight;
+                return [...old , `> ${tm} - image sent to server.`]
+            });
         });
 
         socket_client.on('recognized', (data) => {
@@ -76,7 +80,10 @@ export default function Page(props) {
                 let n_notif = `> ${tm} - ${p.student_name} recognized.`;
                 n_notifs.push(n_notif)
             }
-                setNotifs((old) => [ ...old,...n_notifs]) ;
+                setNotifs((old) =>{
+                    notif_ref.current.scrollTop = notif_ref.current.scrollHeight;
+                    return [ ...old,...n_notifs]
+                }) ;
         });
 
         socket.current = socket_client;
@@ -235,7 +242,7 @@ export default function Page(props) {
                     </button>
                 </div>
             </div>
-            <div className = {styles.notifs} >
+            <div className = {styles.notifs} ref = {notif_ref} >
                 {notifsDisplay}
             </div>
         </div>
