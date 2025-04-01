@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Suspense } from 'react';
 
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 import Top_header from '@/app/top_header';
@@ -55,7 +56,9 @@ export default function RootLayout({
             minHeight: '100vh',
           }}>
             <main className="container" style={{ flex: 1 }}>
+            <Suspense>
               {children}
+            </Suspense>
             </main>
             <footer style={{ 
               textAlign: 'center', 
