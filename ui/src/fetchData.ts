@@ -49,6 +49,20 @@ export const fetchClasses = async (selectedCourse) => {
     return response.classes;
 }
 
+export const fetchClassInfo = async (class_id) => {
+    console.log('get info for class', class_id);
+    let url_class_info = `${BASE}/class/${class_id}`;
+    const response = await apiCall(url_class_info, 'GET',null);
+    return response.class_info;
+}
+
+export const fetchAttendance = async (class_id) => {
+    console.log('fetchAttendance , class_id ', class_id);
+    let url_attendance = `${BASE}/attendance/${class_id}`;
+    const response = await apiCall(url_attendance, 'GET' ,null);
+    return response.attendance;
+}
+
 export const createClass = async (jsonData) => {
     let url_create_class = `${BASE}/create_class`;
     console.log('createClass:', jsonData);
@@ -102,5 +116,20 @@ export const createEmbedding = async (studentId, pic) => {
     }catch(error){
         console.log('error in createEmbedding :',error);
     }
+}
 
+export const removeFromAttendance = async (student_id, class_id) => {
+    console.log('removeFromAttendance ,',student_id, class_id);
+    let jsonData = JSON.stringify({
+        student_id,
+        class_id
+    });
+    let url_remove_att = `${BASE}/delete_att`;
+    try{
+        const res = await apiCall(url_remove_att, 'POST' , jsonData);
+        console.log('removeFromAttendance ,res :', res);
+        return res;
+    }catch(err){
+        console.log('error in removeFromAttendance : ', err);
+    }
 }

@@ -13,11 +13,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
       <div className={styles.content}>
         
-        <div>
             <Suspense fallback={<p> Loading instructor ... </p>}>
                 {children}
             </Suspense>
-        </div>
         
       </div>
     
