@@ -30,7 +30,7 @@
     display : flex;
     flex-direction : column;
     width : 100%;
-    max-height : 75%;
+    max-height : 50%;
     height: fit-content;
     border : 1px solid yellow;
 }
@@ -44,6 +44,7 @@
     max-width : 100%;
     max-height: 100%;
 }
+
 .feedback{
     display : flex;
     justify-content : center;
@@ -51,4 +52,8 @@
     height : fit-content;
     max-height : 45%;
     overflow-y : auto;
+}
+
+.feedback canvas{
+    overflow : auto;
 }

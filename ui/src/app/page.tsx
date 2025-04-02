@@ -31,8 +31,8 @@ export default function Home() {
                   <Link href="/test_attendance?class_id=01b778d8-da2a-4310-992e-cd26f446b5f1" className={styles.link}>
                   Test
                   </Link>
-                  <Link href="/video_chat" className={styles.link}>
-                  all_Test
+                  <Link href="/test_ext_feed?class_id=01b778d8-da2a-4310-992e-cd26f446b5f1" className={styles.link}>
+                  Test external feed
                   </Link>
               </div>
           </div> 

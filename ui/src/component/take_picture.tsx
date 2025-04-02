@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 "use client";
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import styles from './take_picture.module.css';
 
 export default function TakePicture(props) {
@@ -12,6 +12,8 @@ export default function TakePicture(props) {
     const canvas = useRef<HTMLCanvasElement | null>(null);
     const output = useRef<HTMLImageElement | null>(null);
 
+    const [streamON, setStreamON] = useState(false);
+
     const start_capture = async (e: React.MouseEvent) => {
         e.preventDefault();
         console.log('start capture');
@@ -20,6 +22,7 @@ export default function TakePicture(props) {
             if (video_ref.current) {
                 video_ref.current.srcObject = video_stream;
                 video_ref.current.play();
+                setStreamON(true);
             }
         } catch (err) {
             console.log('error in start capture:', err);
@@ -38,6 +41,7 @@ export default function TakePicture(props) {
         if (output.current && !pictureTaken) {
             output.current.src = ''; // Clear the image output
         }
+        setStreamON(false)
     };
 
     const take_picture = async (e: React.MouseEvent) => {
@@ -78,9 +82,11 @@ export default function TakePicture(props) {
                 <button onClick={off_stream} className={styles.button}>
                     Stop
                 </button>
-                <button onClick={take_picture} className={styles.button}>
-                    Take Picture
-                </button>
+                { streamON &&
+                    <button onClick={take_picture} className={styles.button}>
+                        Take Picture
+                    </button>
+                }
             </div>
             </>
         }

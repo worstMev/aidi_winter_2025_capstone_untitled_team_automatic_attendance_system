@@ -63,6 +63,17 @@ export const fetchAttendance = async (class_id) => {
     return response.attendance;
 }
 
+export const fetchStudentClass = async (class_id) => {
+    console.log('fetchStudentClass ', class_id)
+    let url_student_class = `${BASE}/student/${class_id}`
+    const response = await apiCall(url_student_class, 'GET', null);
+    return response.students;
+}
+
+export const fetchStudentCourse = async (course_id) => {
+    console.log('fetchStudentCourse ', course_id)
+}
+
 export const createClass = async (jsonData) => {
     let url_create_class = `${BASE}/create_class`;
     console.log('createClass:', jsonData);
@@ -115,6 +126,22 @@ export const createEmbedding = async (studentId, pic) => {
         return response;
     }catch(error){
         console.log('error in createEmbedding :',error);
+    }
+}
+
+export const addToAttendance = async (student_id, class_id) => {
+    console.log('addToAttendance ,',student_id, class_id);
+    let jsonData = JSON.stringify({
+        student_id,
+        class_id,
+    });
+    let url_add_att = `${BASE}/add_att`;
+    try{
+        const res = await apiCall(url_add_att, 'POST', jsonData);
+        console.log('addToAttendance , res :',res);
+        return res;
+    }catch(err){
+        console.log('error in addToAttendance :', err);
     }
 }
 

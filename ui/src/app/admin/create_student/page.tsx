@@ -70,6 +70,13 @@ const CreateStudent = () => {
       }
   }
 
+  const takeMorePic = () => {
+      console.log('takeMorePic');
+      setCanTakePicture(true);
+      setStudentCreated(false);
+      
+  }
+
 
   return (
     <div className={styles.container}>
@@ -150,20 +157,6 @@ const CreateStudent = () => {
         </div>
 
 
-        <div className={styles.formGroup}>
-          <label htmlFor="semester" className={styles.label}>
-            Semester
-          </label>
-          <input
-            type="text"
-            id="semester"
-            name="semester"
-            value={formData.semester}
-            onChange={handleChange}
-            className={styles.input}
-            required
-          />
-        </div>
 
         <button type="submit" className={styles.submitButton}>
           Submit
@@ -174,7 +167,7 @@ const CreateStudent = () => {
     { canTakePicture &&
         <div className={styles.formGroup}>
          <label htmlFor="takePicture" className={styles.label}>
-           Take Picture for {formData.student_name}
+           Take Picture for {formData.student_name} :
          </label>
          <TakePicture savePic= {savePic} pictureTaken={studentCreated} />
         </div>
@@ -182,6 +175,11 @@ const CreateStudent = () => {
     { studentCreated &&
         <>
         <p> Student registered successfully. </p>
+        <button 
+            onClick = {takeMorePic}
+        > 
+            Take another picture 
+        </button>
         <Link href="/"> Go back to main page </Link>
         </>
     }
