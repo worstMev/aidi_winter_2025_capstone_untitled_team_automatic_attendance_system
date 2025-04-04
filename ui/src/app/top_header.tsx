@@ -37,9 +37,6 @@ export default function Top_header({ handleDrawerToggle }) {
         <Link href="/admin" className={styles.navLink}>
           Admin
         </Link>
-        <Link href="/video_chat" className={styles.navLink}>
-          Video Chat
-        </Link>
       </nav>
     </div>
   );

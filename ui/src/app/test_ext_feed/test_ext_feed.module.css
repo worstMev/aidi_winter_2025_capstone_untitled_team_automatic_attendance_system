@@ -1,16 +1,20 @@
 .all{
     display : flex;
     flex-direction : row;
-    border : 1px solid black;
+    /*border : 1px solid black;*/
     width : 100%;
     height : 100%;
     max-height : 76vh;
 }
 
+.all p{
+    margin : 0;
+}
+
 .display{
     display : flex;
     flex-direction : column;
-    border : 1px solid green;
+    /*border : 1px solid green;*/
     width : 90%;
     max-height : 100%;
 }
@@ -18,7 +22,8 @@
 .notifs{
     display : flex;
     flex-direction : column;
-    border : 1px solid red;
+    /*border : 1px solid red;*/
+    background-color : grey;
     width : 10%;
     padding : 5px;
     overflow-y : auto;
@@ -30,9 +35,10 @@
     display : flex;
     flex-direction : column;
     width : 100%;
-    max-height : 50%;
+    max-height : 75%;
     height: fit-content;
-    border : 1px solid yellow;
+    border-top : 1px solid white;
+    border-bottom : 1px solid white;
 }
 
 .video_container canvas{
@@ -40,7 +46,7 @@
 }
 
 .video_display{
-    border : 1px solid orange;
+    /*border : 1px solid orange;*/
     max-width : 100%;
     max-height: 100%;
 }
