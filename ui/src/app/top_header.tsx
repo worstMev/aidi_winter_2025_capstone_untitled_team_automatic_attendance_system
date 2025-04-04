@@ -28,7 +28,7 @@ export default function Top_header({ handleDrawerToggle }) {
           width={60} 
           height={60} 
         />
-        <h1 className={styles.title}>Video Atten</h1>
+        <h1 className={styles.title}>Automatic Attendance System</h1>
       </div>
       <nav className={styles.nav}>
         <Link href="/" className={styles.navLink}>

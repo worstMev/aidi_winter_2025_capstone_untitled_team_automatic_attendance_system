@@ -7,14 +7,14 @@ import Link from 'next/link';
 export default function Home() {
   return (
       <div className={styles.page} style={{ 
-          backgroundImage: 'url(/background.jpg)', 
+//          backgroundImage: 'url(/background.jpg)', 
           backgroundSize: 'cover', 
           backgroundPosition: 'center',
           paddingTop: '64px', // Adjust for the height of the Top_header
       }}>
           <div className={styles.card}>
               <h1>Welcome to Live Video Attendance</h1>
-              <p>Attendance through seamless video calls.</p>
+              <p>Seamless Attedance through live video.</p>
               <div style={{ display: 'flex', gap: '4rem', flexWrap: 'wrap', justifyContent: 'center' }}>
                   <div>
                       <Link href="/instructor" className={styles.link}>
@@ -23,10 +23,9 @@ export default function Home() {
                       <Link href="/admin/create_instructor"> Sign up as a new instructor </Link>
                   </div>
                   <div>
-                      <Link href="/student" className={styles.link}>
-                          Student
+                      <Link href="/admin/create_student" className={styles.link}>
+                          Sign up as a new student
                       </Link>
-                      <Link href="/admin/create_student"> Sign up as a new student </Link>
                   </div>
                   <Link href="/test_attendance?class_id=01b778d8-da2a-4310-992e-cd26f446b5f1" className={styles.link}>
                   Test
