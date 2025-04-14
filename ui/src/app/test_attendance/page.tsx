@@ -209,8 +209,6 @@ export default function Page(props) {
             set_streamON(true);
             my_video_ref.current.srcObject = new_my_stream;
             //my_video_ref.current.play();
-
-
         } catch (err) {
             console.log("error in get_stream :",err);
 
