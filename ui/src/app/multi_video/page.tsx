@@ -179,8 +179,8 @@ export default function Page() {
         console.log('my_stream useEffect, interval_id ',interval_id);
         if(!interval_id && streamON) {
             console.log('interval_id to be created again :', interval_id);
-            //start_send_stream(14000);
-            start_send_stream(5000);
+            start_send_stream(14000);
+            //start_send_stream(5000);
         }
 
         return () => {
