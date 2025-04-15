@@ -39,6 +39,9 @@ export default function StreamVideo(props) {
                         ref.current.srcObject = remoteStream;
                     }
                 });
+                call.on('close', () => {
+                    console.log('a peer closed call')
+                });
 
             }
             console.log('StreamVideo component , call peer :', remote_peer_id);

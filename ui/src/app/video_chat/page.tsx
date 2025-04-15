@@ -121,6 +121,7 @@ export default function Page() {
         }
 
         start_send_stream(14000);
+        //start_send_stream(5000);
 
         return () => {
             console.log('my_stream useEffect cleanup');
@@ -252,6 +253,7 @@ export default function Page() {
    //send picture of stream
    const send_picture = async (interv=10000) => {
        const blob_pic = await take_picture();
+       console.log('send_picture interv :',interv)
        console.log('data we send ', blob_pic);
        if(blob_pic) {
            socket.current.emit('stream', { blob : blob_pic });

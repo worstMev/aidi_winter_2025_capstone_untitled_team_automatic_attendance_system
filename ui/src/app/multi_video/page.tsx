@@ -19,7 +19,7 @@ export default function Page() {
 
     const [ streamON , set_streamON ] = useState(true);
     const [ remote_peer_ids , set_remote_peer_ids ] = useState([]); //remote peer
-    const [ remote_peer_ids_call , set_remote_peer_ids_call ] = useState([]);//remote peer we actually call
+    const [ remote_peer_ids_call , set_remote_peer_ids_call ] = useState([]);//remote peer we actually call [{peer_id, isCalling, call}]
 
     const [ my_stream, set_my_stream] = useState(null);
     const [ interval_id, set_interval_id ] = useState(null);
@@ -179,7 +179,8 @@ export default function Page() {
         console.log('my_stream useEffect, interval_id ',interval_id);
         if(!interval_id && streamON) {
             console.log('interval_id to be created again :', interval_id);
-            start_send_stream(14000);
+            //start_send_stream(14000);
+            start_send_stream(5000);
         }
 
         return () => {
@@ -294,6 +295,14 @@ export default function Page() {
        clearInterval(interval_id);
    }
 
+   const remove_peer_from_call = (peer_id) => {
+       set_remote_peer_ids_call((old) => {
+           let no_closed_peer_ids = old.filter( el => el.peer_id != peer_id);
+           return no_closed_peer_ids;
+
+       });
+   }
+
    //test emit
    const send_message = () => {
        socket.current.emit('message', 'xxxx');
@@ -322,7 +331,7 @@ export default function Page() {
            return(
                <StreamVideo 
                 stream={my_stream}
-                reduce_stream={()=> console.log('reduce stream')}
+                reduce_stream={()=>remove_peer_from_call(remote_peer_id)}
                 remote_peer_id = {remote_peer_id}
                 my_peer = {peer_instance}
                 isCalling = {isCalling}
