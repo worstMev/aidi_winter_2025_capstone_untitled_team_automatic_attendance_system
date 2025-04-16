@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Screen Capture & Processed Display</title>
+  <style>
+    /* Optional: add a border to the canvas for visibility */
+    #frameCanvas {
+      width: 80%;
+      height: auto;
+      border: 1px solid black;
+    }
+  </style>
+</head>
+<body>
+  <button id="startCapture">Start Screen Capture</button>
+  <button id="stopCapture" disabled>Stop Capture</button>
+  <!-- The video element is hidden since we’re displaying the processed frames on the canvas -->
+  <video id="screenVideo" autoplay playsinline style="display:none;"></video>
+  <canvas id="frameCanvas"></canvas>
+
+  <script>
+    const startButton = document.getElementById('startCapture');
+    const stopButton = document.getElementById('stopCapture');
+    const videoElement = document.getElementById('screenVideo');
+    const canvas = document.getElementById('frameCanvas');
+    const ctx = canvas.getContext('2d');
+    let captureInterval;
+    let stream;
+
+    startButton.addEventListener('click', async () => {
+      try {
+        stream = await navigator.mediaDevices.getDisplayMedia({
+          video: { cursor: "always" },
+          audio: false
+        });
+        videoElement.srcObject = stream;
+        stopButton.disabled = false;
+        startButton.disabled = true;
+
+        // Capture and send a frame every 5000 ms (5 seconds).
+        captureInterval = setInterval(() => {
+          if (videoElement.videoWidth > 0 && videoElement.videoHeight > 0) {
+            // Set canvas dimensions based on the captured video.
+            canvas.width = videoElement.videoWidth;
+            canvas.height = videoElement.videoHeight;
+            // Draw the current video frame onto the canvas.
+            ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+            // Convert the canvas content to a base64 image.
+            const imageDataUrl = canvas.toDataURL('image/jpeg');
+
+            // Send the frame to the backend.
+            fetch('http://localhost:5000/upload_frame', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ image: imageDataUrl })
+            })
+            .then(response => response.json())
+            .then(data => {
+              if (data.status === "processed" && data.image) {
+                // Create an image object and update the canvas with the processed frame.
+                let processedImage = new Image();
+                processedImage.onload = () => {
+                  ctx.clearRect(0, 0, canvas.width, canvas.height);
+                  ctx.drawImage(processedImage, 0, 0, canvas.width, canvas.height);
+                };
+                processedImage.src = data.image;
+              }
+              console.log('Server response:', data);
+            })
+            .catch(error => console.error('Error sending frame:', error));
+          }
+        }, 10000); // 10000 ms interval (10 seconds)
+      } catch (error) {
+        console.error("Error accessing display media:", error);
+      }
+    });
+
+    stopButton.addEventListener('click', () => {
+      clearInterval(captureInterval);
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+      }
+      startButton.disabled = false;
+      stopButton.disabled = true;
+    });
+  </script>
+</body>
+</html>

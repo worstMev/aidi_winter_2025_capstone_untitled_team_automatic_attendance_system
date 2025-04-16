@@ -1,0 +1,10 @@
+Flask
+Flask-Cors
+opencv-python
+numpy
+boto3
+botocore
+cryptography
+snowflake-connector-python
+deepface
+face_recognition
