@@ -141,7 +141,17 @@ export default function Page() {
                     my_video_ref.current.srcObject = mediaStream;
                     my_video_ref.current.play();
                     set_my_stream(mediaStream);
-                    set_remote_peer_ids_call((old) => [ ...old, {peer_id : caller_peer_id, isCalling : true, call}])
+                    set_remote_peer_ids_call((old) =>{
+                        let alr_in = old.filter( el => el.peer_id === caller_peer_id )
+                        if (alr_in.length){
+                            return old
+                        }else{
+                            return [ ...old, {peer_id : caller_peer_id, isCalling : true, call}]
+                        }
+
+
+                    })
+                    
                 }
             }catch(err){
                 console.log('error in peer.on(call):',err);
@@ -376,17 +386,6 @@ export default function Page() {
                             </canvas>
                             <p> {my_peer_id} </p>
                         </div>
-                        <div id={styles.ls_remote}>
-                            remotes : 
-                            { //remote_peer_ids 
-                                array_peer_vids_list
-                            }
-                            <button
-                                onClick={callMany}
-                            >
-                            call everyone
-                            </button>
-                        </div>
                         <div>
                             <button onClick={get_stream}> stream on </button>
                             <button onClick={off_stream}> stream off </button>
@@ -416,8 +415,22 @@ export default function Page() {
                 <button onClick={stop_sending_stream}> stop sending my stream </button>
                 <button onClick={send_message}>send xxx</button>
             </div>
-            <div className = {styles.notifs} ref = {notif_ref} >
-                {notifsDisplay}
+            <div className = {styles.notifs} >
+                <div className={styles.notifs_display} ref = {notif_ref} >
+                    {notifsDisplay
+                    }
+                </div>
+                <div id={styles.ls_remote}>
+                    remotes : 
+                    { //remote_peer_ids 
+                        array_peer_vids_list
+                    }
+                    <button
+                        onClick={callMany}
+                    >
+                    call everyone
+                    </button>
+                </div>
             </div>
         </div>
     );
