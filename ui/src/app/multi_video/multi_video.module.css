@@ -8,52 +8,80 @@
     overflow-x : auto;
 }
 
+.main p{
+    margin : 0;
+}
 .display{
-    border : 1px solid black;
     display : flex;
-    width : 70%;
+    flex-direction : column;
+    /*border : 1px solid green;*/
+    width : 90%;
+    max-height : 100%;
+}
+.videos{
+    display : flex;
+    flex-direction : row;
+    /*border : 1px dashed red;*/
+    height:95%;
 }
 
 .mine{
-    border : 1px solid red;
+    /*border : 1px solid red;*/
     display : flex;
     flex-direction : column;
+    justify-content : space-between;
     width : 50%;
     height : 100%;
 }
+.video_container{
+    display : flex;
+    flex-direction : column;
+    width : 100%;
+    max-height : 75%;
+    height: fit-content;
+    border-top : 1px solid white;
+    border-bottom : 1px solid white;
+}
 
-#pic_canvas{
+.video_container canvas{
     display : none;
 }
 
-#ls_remoter{
-    height : 10%;
-    overflow-y : auto;
+.video_display{
+    /*border : 1px solid orange;*/
+    max-width : 100%;
+    max-height: 100%;
 }
 
 .feedback{
     display : flex;
-    border : 1px solid white;
-    max-height : 40%;
-    width : 100%;
-    max-width : 100%;
+    justify-content : center;
+    /*border : 1px solid white;*/
+    border-top : 1px solid white;
     height : fit-content;
+    max-height : 45%;
+    overflow-y : auto;
 }
 
-#feedback_canvas{
+#ls_remote{
+    height : 10%;
+    overflow-y : auto;
 }
+
+
 
 .others{
     display: flex;
     flex-direction : column;
-    border : 1px solid blue;
+    /*border : 1px solid blue;*/
+    border-left : 1px solid white;
     width : 50%;
     height : 100%;
     overflow-y : auto;
 }
 
 .test{
-    display : flex;
+    display : none;
     flex-direction : column;
 }
 

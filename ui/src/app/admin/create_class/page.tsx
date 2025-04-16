@@ -95,6 +95,7 @@ export default function CreateClass() {
                         Instructor
                     </label>
                     <select 
+                        className={styles.input}
                         value = {selectedInstructor}
                         onChange = { (e) => setSelectedInstructor(e.target.value) }
                         >
@@ -108,19 +109,21 @@ export default function CreateClass() {
                     </label>
                     <select
                         value = {selectedCourse}
+                        className={styles.input}
                         onChange = { (e) => setSelectedCourse(e.target.value) }
                         >
                         {courses_display}
                     </select>
                 </div>
                 <div className={styles.formGroup}>
-                    <label>
-                    date 
+                    <label className={styles.label}>
+                    Date :  
                         <input 
                             type = "date"
                             name= "class_date"
                             value={formData.class_date}
                             onChange={handleChange}
+                            className={styles.input}
                             required
                             />
                     </label>
@@ -128,12 +131,13 @@ export default function CreateClass() {
 
                 <div className={styles.formGroup}>
                     <label>
-                    start
+                    Start:
                         <input 
                             type = "time"
                             name= "class_start"
                             value={formData.class_start}
                             onChange={handleChange}
+                            className={styles.input}
                             required
                             />
                     </label>
@@ -141,12 +145,13 @@ export default function CreateClass() {
 
                 <div className={styles.formGroup}>
                     <label>
-                    end
+                    End:
                         <input 
                             type = "time"
                             name= "class_end"
                             value={formData.class_end}
                             onChange={handleChange}
+                            className={styles.input}
                             required
                             />
                     </label>

@@ -39,8 +39,9 @@ export default function StreamVideo(props) {
                         ref.current.srcObject = remoteStream;
                     }
                 });
-                call.on('close', () => {
-                    console.log('a peer closed call')
+                call.on('close',async () => {
+                    console.log('a peer closed call');
+                    await stopStream();
                 });
 
             }

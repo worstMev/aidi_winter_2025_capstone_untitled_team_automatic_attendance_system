@@ -9,6 +9,7 @@ import { useSearchParams } from 'next/navigation';
 import styles from './multi_video.module.css';
 import StreamVideo from './../../component/streamVideo.tsx';
 
+import ClassInfo from '@/component/class_info';
 
 import { BASE } from '@/fetchData';
 
@@ -364,31 +365,43 @@ export default function Page() {
    return(
         <div className={styles.main}>
             <div className={styles.display}>
-                <div className={styles.mine}>
-                    <video ref={my_video_ref} autoPlay/>
-                    <canvas ref={ canvas } id={styles.pic_canvas} >
-                    </canvas>
-                    <div id={styles.ls_remote}>
-                        remotes : 
-                        { //remote_peer_ids 
-                            array_peer_vids_list
-                        }
-                        <button
-                            onClick={callMany}
-                        >
-                        call everyone
-                        </button>
-                    </div>
-                    <div className={styles.feedback}>
-                        <canvas ref = {feedback_canvas} id={styles.feedback_canvas}>
-                        </canvas>
-                    </div>
+                <div>
+                    <ClassInfo class_id={class_id} />
                 </div>
-                <div className={styles.others}>
-                    {
-                        array_peer_vids
-                    }
+                <div className={styles.videos}>
+                    <div className={styles.mine}>
+                        <div className={styles.video_container}>
+                            <video ref={my_video_ref} className={styles.video_display} autoPlay/>
+                            <canvas ref={ canvas } >
+                            </canvas>
+                            <p> {my_peer_id} </p>
+                        </div>
+                        <div id={styles.ls_remote}>
+                            remotes : 
+                            { //remote_peer_ids 
+                                array_peer_vids_list
+                            }
+                            <button
+                                onClick={callMany}
+                            >
+                            call everyone
+                            </button>
+                        </div>
+                        <div>
+                            <button onClick={get_stream}> stream on </button>
+                            <button onClick={off_stream}> stream off </button>
+                        </div>
+                        <div className={styles.feedback}>
+                            <canvas ref = {feedback_canvas} id={styles.feedback_canvas}>
+                            </canvas>
+                        </div>
+                    </div>
+                    <div className={styles.others}>
+                        {
+                            array_peer_vids
+                        }
 
+                    </div>
                 </div>
             </div>
             <div className={styles.test}>
@@ -399,7 +412,7 @@ export default function Page() {
                 </div>
                 <button onClick={get_stream}> stream on </button>
                 <button onClick={off_stream}> stream off </button>
-                <button onClick={send_picture}> send my stream </button>
+                <button onClick={send_picture}> send my stream (dangereous)</button>
                 <button onClick={stop_sending_stream}> stop sending my stream </button>
                 <button onClick={send_message}>send xxx</button>
             </div>

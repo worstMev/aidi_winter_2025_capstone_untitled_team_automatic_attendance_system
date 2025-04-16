@@ -27,13 +27,13 @@ export default function Home() {
                           Sign up as a new student
                       </Link>
                   </div>
-                  <Link href="/test_attendance?class_id=01b778d8-da2a-4310-992e-cd26f446b5f1" className={styles.link}>
+                  <Link href="/test_attendance?class_id=775abe7b-bfcc-47b6-9fb2-dcfaf38b140f" className={styles.link}>
                   Test
                   </Link>
-                  <Link href="/test_ext_feed?class_id=01b778d8-da2a-4310-992e-cd26f446b5f1" className={styles.link}>
+                  <Link href="/test_ext_feed?class_id=775abe7b-bfcc-47b6-9fb2-dcfaf38b140f" className={styles.link}>
                   Test external feed
                   </Link>
-                  <Link href="/multi_video?class_id=01b778d8-da2a-4310-992e-cd26f446b5f1" className={styles.link}>
+                  <Link href="/multi_video?class_id=775abe7b-bfcc-47b6-9fb2-dcfaf38b140f" className={styles.link}>
                   Test multi video chat
                   </Link>
               </div>

@@ -29,7 +29,7 @@ export default function Class_home() {
         }
 
         fetchData(class_id);
-    },[]);
+    },[class_id]);
 
     const remove_student = async (student_id, class_id ) => {
         console.log('remove_student :', student_id, class_id);
