@@ -117,7 +117,7 @@ export default function CreateClass() {
                 </div>
                 <div className={styles.formGroup}>
                     <label className={styles.label}>
-                    Date :  
+                    Date   
                         <input 
                             type = "date"
                             name= "class_date"
@@ -131,7 +131,7 @@ export default function CreateClass() {
 
                 <div className={styles.formGroup}>
                     <label>
-                    Start:
+                    Start
                         <input 
                             type = "time"
                             name= "class_start"
@@ -145,7 +145,7 @@ export default function CreateClass() {
 
                 <div className={styles.formGroup}>
                     <label>
-                    End:
+                    End
                         <input 
                             type = "time"
                             name= "class_end"

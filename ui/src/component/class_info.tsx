@@ -46,6 +46,16 @@ export default function ClassInfo (props) {
         alert('Link for attendance copied into clipboard!')
     }
 
+    const copyAttLinMultVid = async () => {
+        console.log('copyAttLinkMultVid into clipboard');
+        const link = `${window.location.origin}/multi_video?class_id=${class_id}`
+        console.log('link ',link)
+        const clipboardItem = new ClipboardItem({
+            'text/plain' : link
+        });
+        await navigator.clipboard.write([clipboardItem])
+        alert('Link for attendance copied into clipboard!')
+    }
     return (
         <div className={styles.class_info}>
             <p> {class_name} </p>
@@ -54,6 +64,9 @@ export default function ClassInfo (props) {
             </button>
             <button onClick= {copyAttLinkExt}>
                 Copy attendance link for external feed
+            </button>
+            <button onClick= {copyAttLinMultVid}>
+                Copy attendance link for multi video
             </button>
         </div>
     );

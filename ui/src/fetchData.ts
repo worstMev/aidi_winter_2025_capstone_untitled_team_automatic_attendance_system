@@ -2,8 +2,8 @@
 // @ts-nocheck
 const LOCAL = 'http://localhost:8000';
 const SERVER = 'http://3.137.162.77:8000';
-const SERVER_GPU = 'http://18.216.42.46:8000';
-export const BASE = SERVER;
+const SERVER_GPU = 'http://13.58.76.21:8000';
+export const BASE = SERVER_GPU;
 
 
 const apiCall = async (url,method,jsonData) => {
