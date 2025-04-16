@@ -43,3 +43,11 @@ class Course(BaseModel) :
     course_id : str | None = None
     instructor_id : str | None = None
     course_name : str | None = None
+
+class Del_att_data(BaseModel) :
+    student_id : str | None = None
+    class_id : str | None = None
+
+class Add_att_data(BaseModel) :
+    student_id : str | None = None
+    class_id : str | None = None

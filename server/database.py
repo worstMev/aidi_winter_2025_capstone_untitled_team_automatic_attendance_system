@@ -2,23 +2,33 @@
 #import snowflake
 import snowflake.connector
 import uuid
+import cv2
 from deepface import DeepFace
+from snowflake.connector import DictCursor
+
 MODEL_NAME = 'ArcFace'
 FACE_DETECT_MODEL = 'retinaface'
+
+private_key_file = 'rsa_key.p8'
+private_key_file_pwd = 'hello'
+
 my_db_params ={
-  "account" : "FUKSKIX-MJ13450",
-  "user" : "untitled",
-  "password" : "Capstoneproject2025!",
-  "role" : "ACCOUNTADMIN",
-  "warehouse" : "COMPUTE_WH",
-  "database" : "FACE_RECOGNITION_DB",
-  "schema" : "PUBLIC",
+    "account" : "FUKSKIX-MJ13450",
+    "user" : "untitled",
+    'authenticator': 'SNOWFLAKE_JWT',
+    'private_key_file': private_key_file,
+    'private_key_file_pwd':private_key_file_pwd,
+    "role" : "ACCOUNTADMIN",
+    "warehouse" : "COMPUTE_WH",
+    "database" : "FACE_RECOGNITION_DB",
+    "schema" : "PUBLIC",
   }
 conn = snowflake.connector.connect(
         **my_db_params
 )
 
 cursor = conn.cursor()
+dict_cursor = conn.cursor(DictCursor)
 
 def insert_institution(**kwargs) :
     global cursor
@@ -67,14 +77,14 @@ def insert_student(**kwargs) :
     res_cursor = cursor.execute(query,params_student)
     #if ok TODO : how to check query went well
     if ( res_cursor.rowcount ) :
-        #enroll to IT EXPO
-        #IT EXPO , course_id :d0abd913-3669-428f-8e45-217a970d31d3
+        #enroll to capstone presentation
+        #capstone presentation , course_id :7ec1d8d5-a94a-40e2-b17d-e9b9067fb458
         query_course = """
         INSERT INTO student_course (course_id , student_id) 
         VALUES ( %(course_id)s , %(student_id)s )
         """
         params = {
-                'course_id' : 'd0abd913-3669-428f-8e45-217a970d31d3',
+                'course_id' : '7ec1d8d5-a94a-40e2-b17d-e9b9067fb458',
                 'student_id' : kwargs.get('studentId')
                 }
         res_cursor = cursor.execute(query_course, params)
@@ -87,7 +97,8 @@ def insert_embedding(studentId, img) :
     objs = DeepFace.represent(img_path=img,
                           model_name=MODEL_NAME,
                           detector_backend=FACE_DETECT_MODEL,
-                          anti_spoofing= True)
+                          normalization='ArcFace',
+                          anti_spoofing= False)
     embedding = objs[0]['embedding']
 
     params = {
@@ -172,20 +183,72 @@ def list_instructors() :
     res = cursor.execute(query).fetchall()
     return res;
 
-def list_classes(courseId) :
+def list_classes(courseId = None , class_id = None) :
     global cursor
     query = """
     SELECT course_name, to_char(class_start, 'HH12:MI'), class_id, class_date
     FROM class
     JOIN course using (course_id)
-    WHERE course_id = %(courseId)s;
     """
-    params = {
-            'courseId': courseId
-            }
+    if courseId :
+        query += """WHERE course_id = %(courseId)s"""
+        params = {
+                'courseId': courseId
+                }
+    else :
+        query += """WHERE class_id = %(class_id)s"""
+        params = {
+                'class_id' : class_id
+                }
     #print(f'query = {query}')
     res = cursor.execute(query,params).fetchall()
     return res
+
+def list_attendance(class_id) :
+    global dict_cursor
+    print(f'list_attendance {class_id}')
+    query = """
+    SELECT student_name, last_seen , student_id
+    FROM attendance
+    JOIN student USING (student_id)
+    WHERE class_id = %(class_id)s
+    ORDER BY student_name ASC
+    """
+    params = {
+            'class_id' : class_id 
+            }
+    res = dict_cursor.execute(query,params).fetchall()
+    return res
+
+def list_student_class(class_id, not_in_class = True) :
+    global dict_cursor
+    print(f'list_student_class , not in attendance {class_id}')
+    query = """
+        WITH in_class as (
+         SELECT student_id 
+         FROM attendance 
+         WHERE class_id = %(class_id)s
+        )
+        SELECT student_name, student_id, class_id
+        FROM student
+        JOIN student_course using (student_id)
+        JOIN course using (course_id)
+        JOIN class using (course_id)
+        WHERE class_id = %(class_id)s
+    """
+    if ( not_in_class ) :
+        query += """
+        AND student_id not in ( SELECT student_id from in_class)
+        """
+    query += """
+    ORDER BY student_name ASC
+    """
+    params = {
+            'class_id' : class_id,
+            }
+    res = dict_cursor.execute(query,params).fetchall();
+    return res;
+
 
 def deepface_recon(img_path) :
     # use deepface on the file
@@ -224,7 +287,7 @@ def face_recon(img_path, class_id) :
     faces = DeepFace.represent(img_path=img_path,
                               model_name="ArcFace",
                               detector_backend="retinaface",
-                              anti_spoofing= True)
+                              anti_spoofing= False)
     found_faces = []
     unknown = 0
     for face in faces :
@@ -262,8 +325,161 @@ def face_recon(img_path, class_id) :
     #return student_id recognized else unknown
     #update attendance table of class_id
 
+def count_head(frame) :
+    print('count_head')
+    try:
+        faces = DeepFace.extract_faces(img_path=frame,
+                                        detector_backend="retinaface",
+                                        enforce_detection=False,
+                                        anti_spoofing=False,)
+    except Exception as e:
+        print("Error during face extraction:", e)
+        return frame
 
-async def insert_in_attendance(student_ids, class_id) :
+    
+    nb = 1;
+    for face in faces :
+        facial_area = face.get("facial_area")
+        x = facial_area["x"]
+        y = facial_area["y"]
+        w = facial_area["w"]
+        h = facial_area["h"]
+        label = f'person #{nb}';
+        cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 4)
+        cv2.putText(frame, label, (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+
+    return { 'frame' : frame, 'nb' : len(faces) }
+
+def detect_and_recognize(frame, class_id) :
+    print('detect_and_recognize')
+    faces = DeepFace.represent(img_path=frame,
+                              model_name="ArcFace",
+                              detector_backend="retinaface",
+                              normalization='ArcFace',
+                              anti_spoofing= False)
+    found_faces = []
+    unknown = 0
+    for face in faces :
+        facial_area = face.get("facial_area")
+        x = facial_area["x"]
+        y = facial_area["y"]
+        w = facial_area["w"]
+        h = facial_area["h"]
+        embedding_target = str(face['embedding'])
+        search_query = f"""
+          WITH results as (
+            SELECT
+              student_name, student_id,
+              VECTOR_COSINE_SIMILARITY( content , {embedding_target}::VECTOR(FLOAT,512) ) as similarity
+              FROM class
+                    JOIN course using(course_id)
+                    JOIN student_course using(course_id)
+                    JOIN student using(student_id)
+                    JOIN embedding using (student_id)
+            WHERE class_id = '{class_id}'
+          )
+          SELECT student_name, student_id, similarity
+          FROM results
+          WHERE similarity > 0.5
+          ORDER BY similarity DESC
+        """
+        res = cursor.execute(search_query).fetchall()
+        if (len(res)>0) :
+            student_name = res[0][0]
+            student_id = res[0][1]
+        else :
+            unknown += 1
+            student_name = f'unknown_{unknown}'
+            student_id = 'unknown'
+        cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 4)
+        cv2.putText(frame, student_name, (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+        found_faces.append({'student_name':student_name,'student_id' : student_id})
+
+    print(found_faces)
+    return { 'frame' : frame, 'found_faces' : found_faces };
+
+
+def insert_in_attendance(student_ids, class_id) :
     #create query in a for loop
     #execute the query
     print(f'insert in attendance {student_ids} - {class_id}')
+    #check if already inside
+    for student_id in student_ids :
+        search_query = """
+        SELECT *
+        FROM attendance 
+        WHERE student_id = %(student_id)s AND class_id = %(class_id)s
+        """
+        params = {
+                'student_id': student_id,
+                'class_id' : class_id,
+                }
+        search_res = cursor.execute(search_query, params).fetchall()
+        if ( len(search_res)>0 ) :
+            print('update attendance last seen column')
+            query = """
+            UPDATE attendance
+            SET last_seen = localtimestamp()
+            WHERE student_id = %(student_id)s
+            and class_id = %(class_id)s
+            """
+        else :
+            print('insert in attendance new row')
+            query = """
+            INSERT INTO attendance (student_id, class_id, last_seen)
+            VALUES ( %(student_id)s , %(class_id)s , localtimestamp() )
+            """
+
+        res = cursor.execute(query,params);
+    #check last  status TODO : rollback commit queries
+    q_id = res.sfqid;
+    if ( conn.is_an_error( conn.get_query_status(q_id))) :
+        return 'ERROR inserting/updating attendance table'
+    else :
+        return { 'inserted' : True , 'attendance' : params }
+
+    
+def delete_att(student_id, class_id) :
+    print('delete_att :', student_id, class_id)
+    query = """
+    DELETE 
+    FROM attendance
+    WHERE student_id = %(student_id)s and class_id = %(class_id)s
+    """
+    params = {
+            'student_id' : student_id,
+            'class_id' : class_id
+            }
+    res = cursor.execute(query,params);
+    q_id = res.sfqid;
+    if ( conn.is_an_error( conn.get_query_status(q_id))) :
+        return 'ERROR deleting attendance table'
+    else :
+        return { 'deleted' : True , 'attendance' : params }
+
+def add_to_attendance(student_id, class_id) :
+    print('add_to_attendance :', student_id, class_id)
+    search_query = """
+    SELECT *
+    FROM attendance 
+    WHERE student_id = %(student_id)s AND class_id = %(class_id)s
+    """
+    params = {
+            'student_id': student_id,
+            'class_id' : class_id,
+            }
+    search_res = cursor.execute(search_query, params).fetchall()
+    if ( len(search_res) < 1 ) :
+        query = """
+        INSERT 
+        INTO attendance(student_id, class_id, last_seen)
+        VALUES ( %(student_id)s , %(class_id)s ,localtimestamp() )
+        """
+        res = cursor.execute(query, params);
+        q_i = res.sfqid;
+        if ( conn.is_an_error ( conn.get_query_status(q_i))) :
+            return ' ERRROR inserting attendance table'
+        else :
+            return { 'inserted': True , 'attendance' : params }
+    else :
+        return { 'inserted' : True, 'attendance' : params }

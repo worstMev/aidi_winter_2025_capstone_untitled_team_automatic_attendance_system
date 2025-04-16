@@ -2,11 +2,13 @@ from fastapi import FastAPI,File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 import socketio
 import numpy as np
+import cv2
+import base64
 from deepface import DeepFace
 
 #import data model
-from data_model import Institution, Instructor, Student, Course, Classe
-from database import insert_class, insert_institution, insert_instructor, insert_student, insert_embedding, list_courses, list_instructors, list_classes, face_recon, deepface_recon, insert_in_attendance, insert_course
+from data_model import Institution, Instructor, Student, Course, Classe, Del_att_data, Add_att_data
+from database import insert_class, insert_institution, insert_instructor, insert_student, insert_embedding, list_courses, list_instructors, list_classes, face_recon, deepface_recon, insert_in_attendance, insert_course, list_attendance, delete_att, list_student_class, add_to_attendance, detect_and_recognize, count_head
 
 
 
@@ -45,6 +47,19 @@ db = {
         }
 attendance_db = []
 
+peer_ids_per_class = {
+        'my_class' : {} , # { sid : peerid }
+        }
+
+def get_list_remote_peer_id(sid) :
+    #return list peer id where sid is not sid (not me)
+    data = set();
+    for key,val in peer_ids_per_class.get(my_class).items() :
+        if key != sid :
+            data.add(val)
+    data = list(data)
+    return data
+
 # test api
 @app.get('/')
 def root() :
@@ -65,8 +80,29 @@ async def get_courses(instructorId) :
 @app.get('/classes/{courseId}')
 async def get_classes(courseId) : 
     print(f'get classes for course ',courseId)
-    class_list = list_classes(courseId)
+    class_list = list_classes(courseId = courseId)
     return { 'classes' : class_list }
+
+@app.get('/class/{class_id}')
+async def get_class(class_id) :
+    print(f'get info class from id', class_id)
+    class_info = list_classes(class_id = class_id)
+    print('class_info', class_info)
+    return {'class_info' : class_info[0] }
+
+@app.get('/attendance/{class_id}')
+async def get_attendance(class_id) :
+    print(f'get attendance {class_id}')
+    attendance =  list_attendance(class_id)
+    return { 'attendance' : attendance }
+
+@app.get('/student/{class_id}')
+async def get_student_class(class_id) :
+    #student not in attendance , more like STUDENT IN CLASS
+    print(f'get_student_class {class_id}')
+    students = list_student_class(class_id , not_in_class= True)
+    return { 'students' : students }
+    
 
 @app.post('/create_institution')
 def create_instructor (institution : Institution) :
@@ -111,12 +147,62 @@ async def create_course(course : Course) :
     results = insert_course(**course_dict)
     return results
 
+@app.post('/delete_att')
+async def delete_attendance(del_att_data : Del_att_data) :
+    del_data = del_att_data.dict();
+    results = delete_att(**del_data);
+    return results;
 
-# handle socket-io events
+@app.post('/add_att')
+async def add_attendance(add_att_data : Add_att_data) :
+    add_data = add_att_data.dict()
+    results = add_to_attendance(**add_data);
+    return results;
+
+# handle socket-io events ==========================================================
 @sio.event
 async def connect(sid, *args, **kwargs):
     print(f'{sid} connected')
     await sio.emit( 'hello', { 'data' : 'hello world' }, to=sid);
+
+@sio.event
+async def disconnect(sid, reason) :
+    print(f'{sid} disconnect')
+
+    # for every "room" remove sid peer_id
+    peer_id = peer_ids_per_class.get('my_class').get(f'{sid}')
+    print(f'delete {peer_id}')
+    if( peer_ids_per_class.get('my_class').get(sid) ):
+        del peer_ids_per_class.get('my_class')[f'{sid}']
+    print(f' after deletion {peer_ids_per_class}')
+    await sio.emit('peer disconnected')
+    return
+
+@sio.on('peer_id') 
+async def register_peer(sid,data) :
+    print('peer_id :', data)
+    #TODO: needs some filtering per link , class?
+    peer_ids_per_class.get('my_class').update({ f'{sid}' : f'{data}'});
+    print('peer_ids_per_class' , peer_ids_per_class)
+    await sio.emit('new_peer_registered')
+    #send current remote_peer_ids
+    data = set();
+    for key,val in peer_ids_per_class.get('my_class').items() :
+        if key != sid :
+            data.add(val)
+    data = list(data)
+    await sio.emit('remote_peer_ids',data, to=sid)
+    return
+
+@sio.on('get_peers_id')
+async def get_peers_id(sid, data) :
+    my_class = data;
+    data = set();
+    for key,val in peer_ids_per_class.get(my_class).items() :
+        if key != sid :
+            data.add(val)
+    data = list(data)
+    await sio.emit('remote_peer_ids',data, to=sid)
     return
 
 @sio.on('message')
@@ -214,7 +300,71 @@ async def handle_stream_class(sid, *args, **kwargs):
         for face in recognized if face.get('student_id') != 'unknown'
     ]
 
-    await insert_in_attendance(student_ids, class_id)
+    if (len(student_ids) > 0) :
+        result = insert_in_attendance(student_ids, class_id)
+    #emit update attendance with class_id
     #emit socket recon
 
 
+
+@sio.on('stream_class_no_save')
+async def handle_stream_class_no_save(sid, *args, **kwargs):
+    print('handle_stream_class_no_save class_id',args[0]['class_id'])
+
+    class_id = args[0]['class_id']
+    blob = args[0]['blob']
+    ##image_bytes = base64.b64decode(blob)
+    ##nparr = np.frombuffer(image_bytes, np.uint8)
+    nparr = np.frombuffer(blob, np.uint8)
+    frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+
+    await sio.emit('received_pic', to =sid)
+
+    res = detect_and_recognize(frame, class_id)
+    processed_frame = res.get('frame')
+    recognized = res.get('found_faces')
+
+
+    ret, buffer = cv2.imencode('.jpg', processed_frame)
+    processed_base64 = base64.b64encode(buffer).decode('utf-8')
+    data_url = "data:image/jpeg;base64," + processed_base64
+
+    # Return the processed image in the JSON response.
+    feedback = {"processed" : True, "image": data_url}
+
+    await sio.emit('feedback' , { 'feedback' : feedback } , to = sid)
+
+    await sio.emit('recognized', {'recognized' : recognized} , to = sid)
+    student_ids = [
+        face.get('student_id')
+        for face in recognized if face.get('student_id') != 'unknown'
+    ]
+
+    if(len(student_ids)>0) :
+        result = insert_in_attendance(student_ids, class_id)
+
+    #emit update attendance with class_id
+    #emit socket recon
+
+@sio.on('head_count_stream')
+async def handle_head_count_stream(sid, *args, **kwargs) :
+    print('handle_head_count_stream')
+    blob = args[0]['blob']
+    nparr = np.frombuffer(blob, np.uint8)
+    frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+
+    await sio.emit('received_pic', to =sid)
+
+    res = count_head(frame)
+
+    processed_frame = res.get('frame')
+    number = res.get('nb');
+
+    ret, buffer = cv2.imencode('.jpg', processed_frame)
+    processed_base64 = base64.b64encode(buffer).decode('utf-8')
+    data_url = "data:image/jpeg;base64," + processed_base64
+    # Return the processed image in the JSON response.
+    feedback = {"processed" : True, "image": data_url}
+
+    await sio.emit('feedback' , { 'feedback' : feedback } , to = sid)
+    await sio.emit('head_count', {'number' : number} , to = sid)

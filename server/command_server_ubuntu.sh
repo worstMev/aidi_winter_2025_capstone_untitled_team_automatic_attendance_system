@@ -17,8 +17,8 @@ echo "INFO : pip install fastapi and  uvicorn" &&
 echo "INFO : pip install python-socketio" &&
 #./myvenv/bin/pip install "python-socketio[asyncio]" &&
 #custom socket-io
-./myvenv/bin/pip install -e git+https://github.com/worstMev/python-engineio-wosrtMev.git#egg=engineio_worstMev
-./myvenv/bin/pip install -e git+https://github.com/worstMev/python-socketio-worstMev.git#egg=python_socket_io_worstMev
+./myvenv/bin/pip install -e git+https://github.com/worstMev/python-engineio-wosrtMev.git#egg=engineio_worstMev &&
+./myvenv/bin/pip install -e git+https://github.com/worstMev/python-socketio-worstMev.git#egg=python_socket_io_worstMev &&
 echo "INFO: pip install deepface and tf-keras and pytorch" &&
 ./myvenv/bin/pip install deepface &&
 ./myvenv/bin/pip install tf-keras &&
