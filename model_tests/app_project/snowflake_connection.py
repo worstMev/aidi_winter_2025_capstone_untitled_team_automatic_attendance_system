@@ -9,13 +9,13 @@ import snowflake.connector as sc
 # Create the S3 client and session for AWS Secrets Manager.
 s3 = boto3.client(
     's3',
-    aws_access_key_id='AKIATG6MGZ27MEZI7EM3',
-    aws_secret_access_key='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',
+    aws_access_key_id='',
+    aws_secret_access_key='',
 )
 
 session = boto3.session.Session(
-    aws_access_key_id='AKIATG6MGZ27MEZI7EM3',
-    aws_secret_access_key='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',
+    aws_access_key_id='',
+    aws_secret_access_key='',
     region_name='us-east-2'
 )
 
