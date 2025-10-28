@@ -1,0 +1,107 @@
+
+.main{
+    display : flex;
+    flex-direction : row;
+    width : 100%;
+    height : 100%;
+    max-height : 76vh;
+    overflow-x : auto;
+}
+
+.main p{
+    margin : 0;
+}
+.display{
+    display : flex;
+    flex-direction : column;
+    /*border : 1px solid green;*/
+    width : 80%;
+    max-height : 100%;
+}
+.videos{
+    display : flex;
+    flex-direction : row;
+    /*border : 1px dashed red;*/
+    height:95%;
+}
+
+.mine{
+    /*border : 1px solid red;*/
+    display : flex;
+    flex-direction : column;
+    justify-content : space-between;
+    width : 50%;
+    height : 100%;
+}
+.video_container{
+    display : flex;
+    flex-direction : column;
+    width : 100%;
+    max-height : 75%;
+    height: fit-content;
+    border-top : 1px solid white;
+    border-bottom : 1px solid white;
+}
+
+.video_container canvas{
+    display : none;
+}
+
+.video_display{
+    /*border : 1px solid orange;*/
+    max-width : 100%;
+    max-height: 100%;
+}
+
+.feedback{
+    display : flex;
+    justify-content : center;
+    /*border : 1px solid white;*/
+    border-top : 1px solid white;
+    height : fit-content;
+    max-height : 30%;
+    overflow-y : auto;
+}
+
+
+
+
+.others{
+    display: flex;
+    flex-direction : column;
+    /*border : 1px solid blue;*/
+    border-left : 1px solid white;
+    width : 50%;
+    height : 100%;
+    overflow-y : auto;
+}
+
+.test{
+    display : none;
+    flex-direction : column;
+}
+
+.notifs{
+    display : flex;
+    flex-direction : column;
+    /*border : 1px solid red;*/
+    background-color : grey;
+    width : 20%;
+    padding : 5px;
+    overflow-y : auto;
+    height: 100%;
+    max-height : 100%;
+}
+
+.notifs_display{
+    display : flex;
+    flex-direction : column;
+    height : 50%;
+    border : 1px dashed red;
+    overflow-y : auto;
+}
+#ls_remote{
+    display : flex;
+    flex-direction : column;
+    overflow-y : auto;
+}

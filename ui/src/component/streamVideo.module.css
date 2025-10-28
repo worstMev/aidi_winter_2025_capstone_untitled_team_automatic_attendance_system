@@ -1,0 +1,6 @@
+.all{
+    display: flex;
+    border : 1px solid green;
+    max-width : 100%;
+    flex-direction : column;
+}

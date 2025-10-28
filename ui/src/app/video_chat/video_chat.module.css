@@ -1,0 +1,36 @@
+
+.main{
+    display : flex;
+    flex-direction : row;
+}
+
+.display{
+    border : 1px solid black;
+    display : flex;
+    width : 90%;
+}
+
+.mine{
+    border : 1px solid red;
+    display : flex;
+    flex-direction : column;
+    width : 50%;
+}
+
+.mine canvas{
+    display : none;
+}
+
+.others{
+    display: flex;
+    flex-direction : column;
+    border : 1px solid blue;
+    width : 50%;
+    height : 100vh;
+    overflow-y : auto;
+}
+
+.test{
+    display : flex;
+    flex-direction : column;
+}
